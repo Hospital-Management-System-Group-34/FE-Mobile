@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
+import 'package:hospital_management_system/widgets/warna.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 9, 87, 222),
+      backgroundColor: MyColors.blue(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Center(
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SvgPicture.asset('assets/svg1.svg'),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: MyColors.white(),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   width: 328,
@@ -68,8 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(280, 60),
                                   elevation: 0,
-                                  primary:
-                                      const Color.fromARGB(255, 9, 87, 222)),
+                                  primary: MyColors.blue()),
                               child: PoppinsText.whiteBold('LOGIN', 20))
                         ],
                       ),
