@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/widgets/jadwal_card.dart';
 import 'package:hospital_management_system/widgets/pasien_card.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
@@ -82,9 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.only(left: 24),
                   child: PoppinsText.blackBold('Data Pasien', 16),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 24),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DataPasien()));
+                  },
                   child: PoppinsText.blue('Lihat semua', 12),
+                  
                 ),
               ],
             ),

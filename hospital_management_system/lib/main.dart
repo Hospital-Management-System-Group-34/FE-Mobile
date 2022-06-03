@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/home_screen.dart';
 import 'package:hospital_management_system/view/screens/splash_screen.dart';
 
