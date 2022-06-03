@@ -4,6 +4,8 @@ import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/home_screen.dart';
 import 'package:hospital_management_system/view/screens/splash_screen.dart';
 
+import 'view/screens/jadwal_screen.dart';
+
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SIMARS',
-      home: HomeScreen(),
+      home: JadwalScreen(),
     );
   }
 }
