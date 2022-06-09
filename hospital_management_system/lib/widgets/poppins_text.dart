@@ -12,6 +12,14 @@ class PoppinsText {
         ));
   }
 
+  static blue2semibold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+            color: MyColors.blue3(),
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600));
+  }
+
   static blueSemiBold(String text, double fontSize) {
     return Text(text,
         style: GoogleFonts.poppins(
@@ -54,6 +62,7 @@ class PoppinsText {
 
   static whiteSemiBold(String text, double fontSize) {
     return Text(text,
+        overflow: TextOverflow.ellipsis,
         style: GoogleFonts.poppins(
             color: MyColors.white(),
             fontSize: fontSize,
@@ -80,6 +89,14 @@ class PoppinsText {
     return Text(text,
         style: GoogleFonts.poppins(
             color: MyColors.black(),
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600));
+  }
+
+  static greySemiBold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+            color: MyColors.grey(),
             fontSize: fontSize,
             fontWeight: FontWeight.w600));
   }

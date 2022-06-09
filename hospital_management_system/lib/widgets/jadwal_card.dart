@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
-Widget jadwal1Card() {
+Widget jadwalHomeCard() {
   return Container(
     height: 125,
-    width: 328,
+    width: double.infinity,
     decoration: BoxDecoration(
       color: MyColors.blue(),
       borderRadius: BorderRadius.circular(5.0),
@@ -19,7 +20,10 @@ Widget jadwal1Card() {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PoppinsText.whiteMedium('Nama Pasien', 12),
-              PoppinsText.whiteSemiBold('Cassandra Winter', 14),
+              SizedBox(
+                width: 180,
+                child: PoppinsText.whiteSemiBold('Cassandra Winter steve', 14),
+              ),
             ],
           ),
         ),
@@ -29,89 +33,278 @@ Widget jadwal1Card() {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PoppinsText.whiteMedium('No. Peserta', 12),
-              PoppinsText.whiteSemiBold('1098361345', 14),
+              PoppinsText.whiteMedium('No. Pasien', 12),
+              SizedBox(
+                width: 82,
+                child: PoppinsText.whiteSemiBold('1098361345', 14),
+              ),
             ],
           ),
         ),
-        Positioned(bottom: 18, left: 18, right: 18, child: myWaktuSesi()),
+        Positioned(
+          bottom: 18,
+          left: 18,
+          right: 18,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(flex: 1, child: antrian()),
+              const SizedBox(
+                width: 15,
+              ),
+              Flexible(flex: 2, child: jadwal()),
+            ],
+          ),
+        ),
       ],
     ),
   );
 }
 
-Widget jadwal2Card() {
-  return Container(
-    height: 180,
-    width: 328,
-    decoration: BoxDecoration(
-      color: MyColors.blue(),
-      borderRadius: BorderRadius.circular(5.0),
-    ),
-    child: Stack(
-      children: [
-        Positioned(
-          top: 18,
-          left: 18,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PoppinsText.whiteMedium('Nama Pasien', 12),
-              PoppinsText.whiteSemiBold('Cassandra Winter', 14),
-            ],
+Widget jadwalAkanDatangCard(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5),
+    child: Container(
+      height: 180,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: MyColors.blue(),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 18,
+            left: 18,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PoppinsText.whiteMedium('Nama Pasien', 12),
+                SizedBox(
+                  width: 180,
+                  child: PoppinsText.whiteSemiBold(
+                      'Cassandra Winter steve john', 14),
+                ),
+              ],
+            ),
           ),
-        ),
-        Positioned(
-          top: 18,
-          right: 18,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PoppinsText.whiteMedium('No. Peserta', 12),
-              PoppinsText.whiteSemiBold('1098361345', 14),
-            ],
+          Positioned(
+            top: 18,
+            right: 18,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PoppinsText.whiteMedium('No. Pasien', 12),
+                SizedBox(
+                  width: 82,
+                  child: PoppinsText.whiteSemiBold('1098361345', 14),
+                ),
+              ],
+            ),
           ),
-        ),
-        Positioned(bottom: 75, left: 18, right: 18, child: myWaktuSesi()),
-        Positioned(
-            bottom: 18,
+          Positioned(
+            bottom: 75,
             left: 18,
             right: 18,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: PoppinsText.whiteSemiBold('Re-schedule', 12),
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(140, 10),
-                    primary: MyColors.blue(),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      side: BorderSide(
-                        color: MyColors.white(),
+                Flexible(flex: 1, child: antrian()),
+                const SizedBox(
+                  width: 15,
+                ),
+                Flexible(flex: 2, child: jadwal()),
+              ],
+            ),
+          ),
+          Positioned(
+              bottom: 18,
+              left: 18,
+              right: 18,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        popUpBatal(context);
+                      },
+                      child: PoppinsText.whiteSemiBold('Batalkan', 12),
+                      style: ElevatedButton.styleFrom(
+                        primary: MyColors.blue(),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(
+                            color: MyColors.white(),
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: PoppinsText.blueSemiBold('Proses Pasien', 12),
+                      style: ElevatedButton.styleFrom(
+                        primary: MyColors.white(),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget jadwalSelesaiCard() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5),
+    child: Container(
+      height: 140,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: MyColors.blue(),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PoppinsText.whiteMedium('Nama Pasien', 12),
+                    SizedBox(
+                      width: 180,
+                      child: PoppinsText.whiteSemiBold(
+                          'Cassandra Winter steve udin', 14),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PoppinsText.whiteMedium('No Pasien', 12),
+                    SizedBox(
+                      width: 82,
+                      child: PoppinsText.whiteSemiBold('123897382', 14),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
                   onPressed: () {},
-                  child: PoppinsText.blueSemiBold('Proses Pasien', 12),
+                  child: PoppinsText.blueSemiBold('Lihat Hasil Sesi', 12),
                   style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(140, 10),
                     primary: MyColors.white(),
                     elevation: 0,
                   ),
                 ),
-              ],
-            )),
-      ],
+              ),
+            ),
+          ],
+        ),
+      ),
     ),
   );
 }
 
-Widget myWaktuSesi() {
+Widget jadwalBatalCard() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5),
+    child: Container(
+      height: 140,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: MyColors.grey(),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PoppinsText.whiteMedium('Nama Pasien', 12),
+                    SizedBox(
+                      width: 180,
+                      child: PoppinsText.whiteSemiBold(
+                          'Cassandra Winter steve udin', 14),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PoppinsText.whiteMedium('No Pasien', 12),
+                    SizedBox(
+                      width: 82,
+                      child: PoppinsText.whiteSemiBold('123897382', 14),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: PoppinsText.greySemiBold('Lihat Hasil Sesi', 12),
+                  style: ElevatedButton.styleFrom(
+                    primary: MyColors.white(),
+                    elevation: 0,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget antrian() {
+  return Container(
+    alignment: Alignment.center,
+    height: 35,
+    decoration: BoxDecoration(
+      color: MyColors.blue2(),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: PoppinsText.whiteBold('UM01', 12),
+    ),
+  );
+}
+
+Widget jadwal() {
   return Container(
     height: 35,
     decoration: BoxDecoration(
@@ -119,35 +312,79 @@ Widget myWaktuSesi() {
       borderRadius: BorderRadius.circular(5.0),
     ),
     child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.event,
+            color: MyColors.white(),
+          ),
+          const SizedBox(
+            width: 6,
+          ),
+          PoppinsText.whiteMedium('Minggu, 27 Mei 2022', 12),
+        ],
+      ),
+    ),
+  );
+}
+
+popUpBatal(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: Container(
+        height: 240,
+        color: MyColors.white(),
+        child: Column(
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.event,
-                  color: MyColors.white(),
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                PoppinsText.white('Minggu, 27 Mei 2022', 12),
-              ],
+            PoppinsText.black('Anda Yakin ingin membatalkan sesi ini?', 12),
+            const SizedBox(
+              height: 7,
+            ),
+            SvgPicture.asset('assets/popup1.svg'),
+            const SizedBox(
+              height: 10,
             ),
             Row(
               children: [
-                Icon(
-                  Icons.watch_later,
-                  color: MyColors.white(),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: PoppinsText.blueSemiBold('Ya, batalkan', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.white(),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(
+                          color: MyColors.blue(),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(
-                  width: 6,
+                  width: 20,
                 ),
-                PoppinsText.white('08.00 - 08.30', 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: PoppinsText.whiteSemiBold('Tidak', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.blue(),
+                      elevation: 0,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
-        )),
+        ),
+      ),
+    ),
   );
 }

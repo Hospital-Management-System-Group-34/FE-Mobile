@@ -1,61 +1,50 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
 Widget pasienCard() {
   return Container(
-    height: 110,
-    width: 330,
+    height: 153,
+    width: 156,
     decoration: BoxDecoration(
-        border: Border.all(color: MyColors.blue(), width: 2),
-        borderRadius: BorderRadius.circular(5.0)),
+      color: MyColors.blue(),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
     child: Stack(
       children: [
         Positioned(
-          top: 10,
-          left: 18,
+          top: 15,
+          left: 20,
+          right: 18,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PoppinsText.blue('Nama Pasien', 12),
-              PoppinsText.blackSemiBold('Alteeza Akbar', 14),
+              PoppinsText.whiteMedium('Nama Pasien', 12),
+              PoppinsText.whiteSemiBold('Alteeza Akbar budi santosa', 14),
               const SizedBox(
                 height: 10,
               ),
-              PoppinsText.blue('No. Peserta', 12),
-              PoppinsText.blackSemiBold('1098765432', 14),
+              PoppinsText.whiteMedium('No. Pasien', 12),
+              PoppinsText.whiteSemiBold('1098765432', 14),
             ],
           ),
         ),
         Positioned(
-          right: 10,
-          child: myPopUpMenu(),
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            alignment: Alignment.center,
+            child: PoppinsText.whiteMedium('Lihat Detail Pasien', 10),
+            height: 35,
+            decoration: BoxDecoration(
+              color: MyColors.blue2(),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
         ),
       ],
     ),
-  );
-}
-
-Widget myPopUpMenu() {
-  return PopupMenuButton(
-    icon: Icon(
-      Icons.more_horiz,
-      color: MyColors.blue(),
-      size: 30,
-    ),
-    itemBuilder: (context) => [
-      PopupMenuItem(value: 'Edit', child: PoppinsText.black('Edit', 12)),
-      PopupMenuItem(value: 'Hapus', child: PoppinsText.black('Hapus', 12)),
-    ],
-    onSelected: (value) {
-      if (value == 'Edit') {
-        log('edit edit edit');
-      } else {
-        log('hapus hapus hapus');
-      }
-    },
   );
 }

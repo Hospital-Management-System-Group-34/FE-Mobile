@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/home_screen.dart';
-import 'package:hospital_management_system/view/screens/splash_screen.dart';
-
-import 'view/screens/jadwal_screen.dart';
+import 'package:hospital_management_system/widgets/warna.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -17,10 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: MyColors.white(),
+      ),
       title: 'SIMARS',
-      home: JadwalScreen(),
+      home: const HomeScreen(),
     );
   }
 }
