@@ -7,8 +7,9 @@ Widget pasienCard() {
     height: 153,
     width: 156,
     decoration: BoxDecoration(
-      color: MyColors.blue(),
+      color: MyColors.white(),
       borderRadius: BorderRadius.circular(5.0),
+      border: Border.all(color: MyColors.blue(), width: 1.3),
     ),
     child: Stack(
       children: [
@@ -20,27 +21,28 @@ Widget pasienCard() {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PoppinsText.whiteMedium('Nama Pasien', 12),
-              PoppinsText.whiteSemiBold('Alteeza Akbar budi santosa', 14),
+              PoppinsText.grey2Medium('Nama Pasien', 12),
+              PoppinsText.blueSemiBold('Alteeza Akbar budi santosa', 14),
               const SizedBox(
                 height: 10,
               ),
-              PoppinsText.whiteMedium('No. Pasien', 12),
-              PoppinsText.whiteSemiBold('1098765432', 14),
+              PoppinsText.grey2Medium('No. Rekam Medis', 12),
+              PoppinsText.blueSemiBold('1098765432', 14),
             ],
           ),
         ),
         Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
+          bottom: -1,
+          left: -1,
+          right: -1,
           child: Container(
             alignment: Alignment.center,
             child: PoppinsText.whiteMedium('Lihat Detail Pasien', 10),
             height: 35,
             decoration: BoxDecoration(
-              color: MyColors.blue2(),
-              borderRadius: BorderRadius.circular(5.0),
+              color: MyColors.blue(),
+              borderRadius:
+                  const BorderRadius.vertical(bottom: Radius.circular(5.0)),
             ),
           ),
         ),

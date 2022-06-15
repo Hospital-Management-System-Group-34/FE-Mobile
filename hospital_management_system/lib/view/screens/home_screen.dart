@@ -19,16 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          SizedBox(
             height: 170,
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: MyColors.blue(),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
             child: Stack(
               children: [
                 Positioned(
@@ -38,27 +31,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 30,
-                        backgroundColor: MyColors.white(),
-                        child: Icon(
-                          Icons.person,
-                          color: MyColors.blue(),
-                        ),
+                        backgroundImage: AssetImage('assets/Ava.png'),
                       ),
                       const SizedBox(width: 15),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          PoppinsText.whiteBold('Keshya Valerie Sky', 16),
-                          PoppinsText.blue2semibold('Dokter Umum', 12),
+                          PoppinsText.blackBold('Keshya Valerie Sky', 16),
+                          PoppinsText.blueSemiBold('Dokter Umum', 12),
                         ],
                       ),
                       const SizedBox(width: 40),
                       IconButton(
                         icon: Icon(Icons.arrow_forward_ios,
-                            color: MyColors.white()),
+                            color: MyColors.blue()),
                         alignment: Alignment.centerRight,
                         onPressed: () {},
                       ),
@@ -68,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          const Divider(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 8, right: 14, left: 14),
