@@ -25,6 +25,10 @@ class MyColors {
     return const Color.fromARGB(255, 155, 155, 155);
   }
 
+  static grey2() {
+    return const Color.fromARGB(255, 161, 161, 161);
+  }
+
   static unselectedTabBar() {
     return const Color.fromARGB(255, 248, 248, 248);
   }
