@@ -87,6 +87,14 @@ class PoppinsText {
             fontWeight: FontWeight.bold));
   }
 
+  static blackMedium(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+            color: MyColors.black(),
+            fontSize: fontSize,
+            fontWeight: FontWeight.w500));
+  }
+
   static blackSemiBold(String text, double fontSize) {
     return Text(text,
         style: GoogleFonts.poppins(
@@ -109,5 +117,68 @@ class PoppinsText {
             color: MyColors.grey2(),
             fontSize: fontSize,
             fontWeight: FontWeight.w500));
+  }
+
+  static neutral9Normal(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.black(),
+          fontWeight: FontWeight.w400,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral9Medium(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.black(),
+          fontWeight: FontWeight.w500,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral9Bold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.black(),
+          fontWeight: FontWeight.w700,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral6Normal(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.neutral6(),
+          fontWeight: FontWeight.w400,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral6Medium(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.neutral6(),
+          fontWeight: FontWeight.w500,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral6SemiBold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.neutral6(),
+          fontWeight: FontWeight.w600,
+          fontSize: fontSize,
+        ));
+  }
+
+  static neutral5Bold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.neutral5(),
+          fontWeight: FontWeight.w700,
+          fontSize: fontSize,
+        ));
   }
 }
