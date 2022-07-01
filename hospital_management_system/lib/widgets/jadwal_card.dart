@@ -62,228 +62,219 @@ Widget jadwalHomeCard() {
 }
 
 Widget jadwalAkanDatangCard(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 5),
-    child: Container(
-      height: 180,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: MyColors.blue(),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 18,
-            left: 18,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PoppinsText.whiteMedium('Nama Pasien', 12),
-                SizedBox(
-                  width: 180,
-                  child: PoppinsText.whiteSemiBold(
-                      'Cassandra Winter steve john', 14),
-                ),
-              ],
-            ),
+  return Container(
+    height: 180,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: MyColors.blue(),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    child: Stack(
+      children: [
+        Positioned(
+          top: 18,
+          left: 18,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PoppinsText.whiteMedium('Nama Pasien', 12),
+              SizedBox(
+                width: 180,
+                child: PoppinsText.whiteSemiBold(
+                    'Cassandra Winter steve john', 14),
+              ),
+            ],
           ),
-          Positioned(
-            top: 18,
-            right: 18,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PoppinsText.whiteMedium('No. Pasien', 12),
-                SizedBox(
-                  width: 82,
-                  child: PoppinsText.whiteSemiBold('1098361345', 14),
-                ),
-              ],
-            ),
+        ),
+        Positioned(
+          top: 18,
+          right: 18,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PoppinsText.whiteMedium('No. Pasien', 12),
+              SizedBox(
+                width: 82,
+                child: PoppinsText.whiteSemiBold('1098361345', 14),
+              ),
+            ],
           ),
-          Positioned(
-            bottom: 75,
+        ),
+        Positioned(
+          bottom: 75,
+          left: 18,
+          right: 18,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(flex: 1, child: antrian()),
+              const SizedBox(
+                width: 15,
+              ),
+              Flexible(flex: 2, child: jadwal()),
+            ],
+          ),
+        ),
+        Positioned(
+            bottom: 18,
             left: 18,
             right: 18,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(flex: 1, child: antrian()),
-                const SizedBox(
-                  width: 15,
-                ),
-                Flexible(flex: 2, child: jadwal()),
-              ],
-            ),
-          ),
-          Positioned(
-              bottom: 18,
-              left: 18,
-              right: 18,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        popUpBatal(context);
-                      },
-                      child: PoppinsText.whiteSemiBold('Batalkan', 12),
-                      style: ElevatedButton.styleFrom(
-                        primary: MyColors.blue(),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(
-                            color: MyColors.white(),
-                          ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      popUpBatal(context);
+                    },
+                    child: PoppinsText.whiteSemiBold('Batalkan', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.blue(),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(
+                          color: MyColors.white(),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: PoppinsText.blueSemiBold('Proses Pasien', 12),
-                      style: ElevatedButton.styleFrom(
-                        primary: MyColors.white(),
-                        elevation: 0,
-                      ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: PoppinsText.blueSemiBold('Proses Pasien', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.white(),
+                      elevation: 0,
                     ),
                   ),
+                ),
+              ],
+            )),
+      ],
+    ),
+  );
+}
+
+Widget jadwalSelesaiCard() {
+  return Container(
+    height: 140,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: MyColors.blue(),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PoppinsText.whiteMedium('Nama Pasien', 12),
+                  SizedBox(
+                    width: 180,
+                    child: PoppinsText.whiteSemiBold(
+                        'Cassandra Winter steve udin', 14),
+                  ),
                 ],
-              )),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PoppinsText.whiteMedium('No Pasien', 12),
+                  SizedBox(
+                    width: 82,
+                    child: PoppinsText.whiteSemiBold('123897382', 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: PoppinsText.blueSemiBold('Lihat Hasil Sesi', 12),
+                style: ElevatedButton.styleFrom(
+                  primary: MyColors.white(),
+                  elevation: 0,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     ),
   );
 }
 
-Widget jadwalSelesaiCard() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 5),
-    child: Container(
-      height: 140,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: MyColors.blue(),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PoppinsText.whiteMedium('Nama Pasien', 12),
-                    SizedBox(
-                      width: 180,
-                      child: PoppinsText.whiteSemiBold(
-                          'Cassandra Winter steve udin', 14),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PoppinsText.whiteMedium('No Pasien', 12),
-                    SizedBox(
-                      width: 82,
-                      child: PoppinsText.whiteSemiBold('123897382', 14),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: PoppinsText.blueSemiBold('Lihat Hasil Sesi', 12),
-                  style: ElevatedButton.styleFrom(
-                    primary: MyColors.white(),
-                    elevation: 0,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
 Widget jadwalBatalCard() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 5),
-    child: Container(
-      height: 140,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: MyColors.grey(),
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PoppinsText.whiteMedium('Nama Pasien', 12),
-                    SizedBox(
-                      width: 180,
-                      child: PoppinsText.whiteSemiBold(
-                          'Cassandra Winter steve udin', 14),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PoppinsText.whiteMedium('No Pasien', 12),
-                    SizedBox(
-                      width: 82,
-                      child: PoppinsText.whiteSemiBold('123897382', 14),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: PoppinsText.greySemiBold('Lihat Hasil Sesi', 12),
-                  style: ElevatedButton.styleFrom(
-                    primary: MyColors.white(),
-                    elevation: 0,
+  return Container(
+    height: 140,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: MyColors.grey(),
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PoppinsText.whiteMedium('Nama Pasien', 12),
+                  SizedBox(
+                    width: 180,
+                    child: PoppinsText.whiteSemiBold(
+                        'Cassandra Winter steve udin', 14),
                   ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PoppinsText.whiteMedium('No Pasien', 12),
+                  SizedBox(
+                    width: 82,
+                    child: PoppinsText.whiteSemiBold('123897382', 14),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {},
+                child: PoppinsText.greySemiBold('Lihat Hasil Sesi', 12),
+                style: ElevatedButton.styleFrom(
+                  primary: MyColors.white(),
+                  elevation: 0,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     ),
   );
