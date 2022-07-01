@@ -27,37 +27,42 @@ class _JadwalScreenState extends State<JadwalScreen> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+          padding: const EdgeInsets.only(
+            top: 15,
+          ),
           child: Column(
             children: [
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: MyColors.unselectedTabBar(),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TabBar(
-                  unselectedLabelColor: MyColors.unselectedTextTabBar(),
-                  labelColor: MyColors.white(),
-                  indicator: BoxDecoration(
-                    color: MyColors.blue(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: MyColors.unselectedTabBar(),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  tabs: const [
-                    Tab(
-                      text: 'Akan Datang',
+                  child: TabBar(
+                    unselectedLabelColor: MyColors.unselectedTextTabBar(),
+                    labelColor: MyColors.white(),
+                    indicator: BoxDecoration(
+                      color: MyColors.blue(),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    Tab(
-                      text: 'Selesai',
-                    ),
-                    Tab(
-                      text: 'Dibatalkan',
-                    ),
-                  ],
+                    tabs: const [
+                      Tab(
+                        text: 'Akan Datang',
+                      ),
+                      Tab(
+                        text: 'Selesai',
+                      ),
+                      Tab(
+                        text: 'Dibatalkan',
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
               ),
               Expanded(
                 child: TabBarView(
@@ -76,41 +81,50 @@ class _JadwalScreenState extends State<JadwalScreen> {
   }
 
   Widget akanDatang() {
-    return ListView.builder(
-      itemCount: 10,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: jadwalAkanDatangCard(context),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+        itemCount: 10,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: jadwalAkanDatangCard(context),
+          );
+        },
+      ),
     );
   }
 
   Widget selesai() {
-    return ListView.builder(
-      itemCount: 10,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: jadwalSelesaiCard(),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+        itemCount: 10,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: jadwalSelesaiCard(),
+          );
+        },
+      ),
     );
   }
 
   Widget diBatalkan() {
-    return ListView.builder(
-      itemCount: 10,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: jadwalBatalCard(),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+        itemCount: 10,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: jadwalBatalCard(),
+          );
+        },
+      ),
     );
   }
 }
