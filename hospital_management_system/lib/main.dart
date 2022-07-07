@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hospital_management_system/view/screens/home_screen.dart';
+import 'package:hospital_management_system/view/screens/login_screen.dart';
+import 'package:hospital_management_system/view/screens/profile_screen.dart';
+import 'package:hospital_management_system/view/screens/splash_screen.dart';
+import 'package:hospital_management_system/viewmodels/provider/auth_provider.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => LogoutProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +32,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: MyColors.white(),
       ),
       title: 'SIMARS',
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

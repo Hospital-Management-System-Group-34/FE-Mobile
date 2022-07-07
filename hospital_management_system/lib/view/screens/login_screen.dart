@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hospital_management_system/view/screens/home_screen.dart';
+import 'package:hospital_management_system/viewmodels/provider/auth_provider.dart';
+import 'package:hospital_management_system/widgets/dialog_auth.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +17,26 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  var controllerId = TextEditingController();
+  var controllerPassword = TextEditingController();
+  late SharedPreferences sp;
+
+  @override
+  void dispose() {
+    super.dispose();
+    controllerId.dispose();
+    controllerPassword.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<LoginProvider>(context, listen: false)
+          .changeState(LoginState.standby);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,44 +60,161 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Form(
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          PoppinsText.blueBold('LOGIN', 40),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                PoppinsText.blackBold('ID Admin', 16),
-                                TextFormField(
-                                  decoration: const InputDecoration(
-                                    hintText: 'Masukkan ID kamu',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 10),
+                      child: Consumer<LoginProvider>(
+                        builder: (context, provider, _) => Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            PoppinsText.blueBold('LOGIN', 40),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  PoppinsText.blackBold('ID', 16),
+                                  TextFormField(
+                                    controller: controllerId,
+                                    enabled:
+                                        provider.state != LoginState.standby
+                                            ? false
+                                            : true,
+                                    decoration: InputDecoration(
+                                      hintStyle: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: MyColors.neutral6(),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      hintText: 'Masukkan ID kamu',
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: MyColors.neutral7(),
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: MyColors.neutral6(),
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                PoppinsText.blackBold('Password', 16),
-                                TextFormField(
-                                  decoration: const InputDecoration(
-                                    hintText: 'Masukkan Password kamu',
-                                    border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 10),
+                                  PoppinsText.blackBold('Password', 16),
+                                  TextFormField(
+                                    controller: controllerPassword,
+                                    obscureText: true,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    enabled:
+                                        provider.state != LoginState.standby
+                                            ? false
+                                            : true,
+                                    decoration: InputDecoration(
+                                      hintStyle: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        color: MyColors.neutral6(),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      hintText: 'Masukkan password kamu',
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: MyColors.neutral7(),
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: MyColors.neutral6(),
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {},
+                            ElevatedButton(
+                              onPressed: provider.state != LoginState.standby
+                                  ? null
+                                  : () async {
+                                      await Provider.of<LoginProvider>(context,
+                                              listen: false)
+                                          .login(controllerId.text,
+                                              controllerPassword.text);
+
+                                      if (provider.state == LoginState.error) {
+                                        if (provider.loginModel?.code == 400) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (context) => dialogAuth(
+                                                context,
+                                                'Password Salah',
+                                                'Password yang anda masukkan salah. Silahkan coba kembali.'),
+                                          );
+                                        } else if (provider.loginModel?.code ==
+                                            404) {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (context) => dialogAuth(
+                                                context,
+                                                'Tidak Bisa Menemukan Akun',
+                                                'Tidak dapat menemukan akun. Silahkan periksa kembali id yang anda masukkan dan coba lagi.'),
+                                          );
+                                        } else {
+                                          showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (context) => dialogAuth(
+                                                context,
+                                                'Unknown Error',
+                                                'Terdapat masalah, tolong hubungi teknisi'),
+                                          );
+                                        }
+                                      } else if (provider.state ==
+                                          LoginState.success) {
+                                        sp = await SharedPreferences
+                                            .getInstance();
+                                        sp.setBool('loginStatus', true);
+                                        sp.setString('user', controllerId.text);
+                                        sp.setString('accessToken',
+                                            '${provider.loginModel?.data?.accessToken}');
+                                        sp.setString('refreshToken',
+                                            '${provider.loginModel?.data?.refreshToken}');
+                                        if (!mounted) return;
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen(),
+                                          ),
+                                          (route) => false,
+                                        );
+                                      }
+                                    },
                               style: ElevatedButton.styleFrom(
                                   minimumSize: const Size(280, 60),
                                   elevation: 0,
                                   primary: MyColors.blue()),
-                              child: PoppinsText.whiteBold('LOGIN', 20))
-                        ],
+                              child: provider.state == LoginState.processing
+                                  ? const CircularProgressIndicator()
+                                  : PoppinsText.whiteBold('LOGIN', 20),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

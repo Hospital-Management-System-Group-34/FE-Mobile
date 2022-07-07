@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/jadwal_screen.dart';
+import 'package:hospital_management_system/view/screens/profile_screen.dart';
 import 'package:hospital_management_system/widgets/jadwal_card.dart';
 import 'package:hospital_management_system/widgets/pasien_card.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
@@ -49,7 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icon(Icons.arrow_forward_ios,
                             color: MyColors.blue()),
                         alignment: Alignment.centerRight,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileScreen(),
+                              ));
+                        },
                       ),
                     ],
                   ),
