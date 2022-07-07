@@ -68,4 +68,8 @@ class MyColors {
   static neutral9() {
     return const Color.fromARGB(255, 5, 5, 5);
   }
+
+  static secondary7() {
+    return const Color.fromARGB(255, 4, 114, 159);
+  }
 }

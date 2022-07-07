@@ -181,4 +181,13 @@ class PoppinsText {
           fontSize: fontSize,
         ));
   }
+
+  static secondary7SemiBold(String text, double fontSize) {
+    return Text(text,
+        style: GoogleFonts.poppins(
+          color: MyColors.secondary7(),
+          fontWeight: FontWeight.w600,
+          fontSize: fontSize,
+        ));
+  }
 }
