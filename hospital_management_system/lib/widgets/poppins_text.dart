@@ -137,6 +137,18 @@ class PoppinsText {
         ));
   }
 
+  static neutral9SemiBold(String text, double fontSize) {
+    return Text(
+      text,
+      style: GoogleFonts.poppins(
+        color: MyColors.black(),
+        fontWeight: FontWeight.w600,
+        fontSize: fontSize,
+      ),
+      maxLines: 10,
+    );
+  }
+
   static neutral9Bold(String text, double fontSize) {
     return Text(text,
         style: GoogleFonts.poppins(
