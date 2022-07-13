@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hospital_management_system/models/authentication_model.dart';
+import 'package:hospital_management_system/services/hospital_api.dart';
 import 'package:hospital_management_system/view/screens/home_screen.dart';
 import 'package:hospital_management_system/view/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late SharedPreferences loginData;
+  late SharedPreferences sp;
   late bool statusLogin;
 
   @override
@@ -24,22 +26,44 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkLogin() async {
-    loginData = await SharedPreferences.getInstance();
-    statusLogin = loginData.getBool('loginStatus') ?? false;
+    sp = await SharedPreferences.getInstance();
+    statusLogin = sp.getBool('loginStatus') ?? false;
+    final HospitalApi hospitalApi = HospitalApi();
 
     if (statusLogin == true) {
-      Future.delayed(
-        const Duration(seconds: 2),
-        () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-            (route) => false,
-          );
-        },
-      );
+      AuthModel authModel = await hospitalApi.refreshAccessToken();
+      if (authModel.code != 200) {
+        await sp.setBool('loginStatus', false);
+        await sp.remove('user');
+        await sp.remove('accessToken');
+        await sp.remove('refreshToken');
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ),
+              (route) => false,
+            );
+          },
+        );
+      } else {
+        await sp.setString('accessToken', authModel.data!.accessToken!);
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+              (route) => false,
+            );
+          },
+        );
+      }
     } else if (statusLogin == false) {
       Future.delayed(
         const Duration(seconds: 2),
