@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hospital_management_system/view/screens/proses_pasien_screen.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
@@ -145,7 +146,13 @@ Widget jadwalAkanDatangCard(BuildContext context) {
                 ),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProsesPasienScreen(),
+                          ));
+                    },
                     child: PoppinsText.blueSemiBold('Proses Pasien', 12),
                     style: ElevatedButton.styleFrom(
                       primary: MyColors.white(),
