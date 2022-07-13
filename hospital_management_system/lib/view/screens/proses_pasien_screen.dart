@@ -12,7 +12,8 @@ class ProsesPasienScreen extends StatefulWidget {
   State<ProsesPasienScreen> createState() => _ProsesPasienScreenState();
 }
 
-class _ProsesPasienScreenState extends State<ProsesPasienScreen> {
+class _ProsesPasienScreenState extends State<ProsesPasienScreen>
+    with SingleTickerProviderStateMixin {
   var controllerAnamnesa = TextEditingController();
   var controllerTerapiObat = TextEditingController();
   var controllerTerapiNonObat = TextEditingController();
@@ -22,6 +23,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen> {
   var controllerSistole = TextEditingController();
   var controllerDiastole = TextEditingController();
   var controllerSuhu = TextEditingController();
+  late TabController _controllerTab;
 
   final valueAlergiObat = ValueNotifier('');
   final alergiObatItem = ['Ada', 'Tidak Ada'];
@@ -29,13 +31,29 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen> {
   final valueStatPulang = ValueNotifier('');
   final statPulangItem = ['Rawat Jalan', 'Rawat Inap'];
 
+  String title = 'Detail Pasien';
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerTab = TabController(vsync: this, length: 2);
+    _controllerTab.addListener(() {
+      if (_controllerTab.index == 0) {
+        title = 'Detail Pasien';
+      } else {
+        title = 'Proses Pasien';
+      }
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: PoppinsText.blackBold('Proses Pasien', 16),
+          title: PoppinsText.blackBold(title, 16),
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
@@ -56,6 +74,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TabBar(
+                    controller: _controllerTab,
                     unselectedLabelColor: MyColors.unselectedTextTabBar(),
                     labelColor: MyColors.white(),
                     indicator: BoxDecoration(
@@ -78,6 +97,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen> {
               ),
               Expanded(
                 child: TabBarView(
+                  controller: _controllerTab,
                   children: [
                     detailPasien(),
                     prosesPasien(),

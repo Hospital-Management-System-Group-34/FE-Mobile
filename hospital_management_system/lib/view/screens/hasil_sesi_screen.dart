@@ -10,14 +10,32 @@ class HasilSesiScreen extends StatefulWidget {
   State<HasilSesiScreen> createState() => _HasilSesiScreenState();
 }
 
-class _HasilSesiScreenState extends State<HasilSesiScreen> {
+class _HasilSesiScreenState extends State<HasilSesiScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _controllerTab;
+  String title = 'Detail Pasien';
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerTab = TabController(length: 2, vsync: this);
+    _controllerTab.addListener(() {
+      if (_controllerTab.index == 0) {
+        title = 'Detail Pasien';
+      } else {
+        title = 'Hasil Sesi';
+      }
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: PoppinsText.blackBold('Hasil Sesi', 16),
+          title: PoppinsText.blackBold(title, 16),
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
@@ -38,6 +56,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TabBar(
+                    controller: _controllerTab,
                     unselectedLabelColor: MyColors.unselectedTextTabBar(),
                     labelColor: MyColors.white(),
                     indicator: BoxDecoration(
@@ -60,6 +79,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen> {
               ),
               Expanded(
                 child: TabBarView(
+                  controller: _controllerTab,
                   children: [
                     detailPasien(),
                     hasilSesi(),
