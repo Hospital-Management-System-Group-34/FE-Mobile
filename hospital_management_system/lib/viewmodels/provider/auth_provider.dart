@@ -21,7 +21,7 @@ enum LogoutState {
 class LoginProvider extends ChangeNotifier {
   LoginState _state = LoginState.standby;
   LoginState get state => _state;
-  final AuthApi authApi = AuthApi();
+  final HospitalApi hospitalApi = HospitalApi();
   AuthModel? loginModel;
 
   changeState(LoginState s) {
@@ -32,7 +32,7 @@ class LoginProvider extends ChangeNotifier {
   Future login(String id, String password) async {
     changeState(LoginState.processing);
     try {
-      loginModel = await authApi.login(id, password);
+      loginModel = await hospitalApi.login(id, password);
       notifyListeners();
       if (loginModel?.code != 200) {
         changeState(LoginState.error);
@@ -49,7 +49,7 @@ class LoginProvider extends ChangeNotifier {
 class LogoutProvider extends ChangeNotifier {
   LogoutState _state = LogoutState.standby;
   LogoutState get state => _state;
-  final AuthApi authApi = AuthApi();
+  final HospitalApi hospitalApi = HospitalApi();
   AuthModel? logoutModel;
 
   changeState(LogoutState s) {
@@ -60,7 +60,7 @@ class LogoutProvider extends ChangeNotifier {
   Future logout() async {
     changeState(LogoutState.processing);
     try {
-      logoutModel = await authApi.logout();
+      logoutModel = await hospitalApi.logout();
       notifyListeners();
       if (logoutModel?.code != 200) {
         changeState(LogoutState.error);
