@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/jadwal_screen.dart';
 import 'package:hospital_management_system/view/screens/profile_screen.dart';
+import 'package:hospital_management_system/viewmodels/provider/patient_provider.dart';
 import 'package:hospital_management_system/widgets/jadwal_card.dart';
 import 'package:hospital_management_system/widgets/pasien_card.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +17,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<PatientProvider>(context, listen: false).getPatient();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,17 +118,59 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemCount: 4,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 16),
-                    itemBuilder: (context, index) {
-                      return pasienCard();
+                  Consumer<PatientProvider>(
+                    builder: (context, provider, _) {
+                      if (provider.state == PatientState.empty) {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            PoppinsText.neutral6SemiBold(
+                                'Empty Patient Data', 16),
+                          ],
+                        );
+                      } else if (provider.state == PatientState.loading) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            SizedBox(height: 50),
+                            CircularProgressIndicator(),
+                          ],
+                        );
+                      } else if (provider.state == PatientState.error) {
+                        return Column(
+                          children: [
+                            const SizedBox(height: 50),
+                            PoppinsText.blackSemiBold(
+                                'Error ${provider.patientModel?.code}', 16),
+                            const SizedBox(height: 10),
+                            PoppinsText.neutral6Normal(
+                                'terdapat masalah, tolong hubungi teknisi', 12),
+                          ],
+                        );
+                      } else {
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: provider.patientModel!.data!.length < 4
+                              ? provider.patientModel!.data!.length
+                              : 4,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16),
+                          itemBuilder: (context, index) {
+                            final pasien = provider.patientModel?.data?[
+                                (provider.patientModel!.data!.length) -
+                                    (index + 1)];
+                            return pasienCard(
+                                context: context,
+                                id: pasien!.id!,
+                                nama: pasien.name!,
+                                noRekamMedis: pasien.medicalRecord!);
+                          },
+                        );
+                      }
                     },
                   ),
                 ],
