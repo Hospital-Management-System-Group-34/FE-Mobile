@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hospital_management_system/viewmodels/provider/patient_provider.dart';
 import 'package:hospital_management_system/widgets/pasien_card.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/poppins_text.dart';
 
@@ -48,16 +50,54 @@ class _DataPasienState extends State<DataPasien> {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemCount: 11,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16),
-                itemBuilder: (context, index) {
-                  return pasienCard();
+              child: Consumer<PatientProvider>(
+                builder: (context, provider, _) {
+                  if (provider.state == PatientState.empty) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 50),
+                        PoppinsText.neutral6SemiBold('Empty Patient Data', 16),
+                      ],
+                    );
+                  } else if (provider.state == PatientState.loading) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(height: 50),
+                        CircularProgressIndicator(),
+                      ],
+                    );
+                  } else if (provider.state == PatientState.error) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 50),
+                        PoppinsText.blackSemiBold(
+                            'Error ${provider.patientModel?.code}', 16),
+                        const SizedBox(height: 10),
+                        PoppinsText.neutral6Normal(
+                            'terdapat masalah, tolong hubungi teknisi', 12),
+                      ],
+                    );
+                  } else {
+                    return GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: provider.patientModel?.data?.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16),
+                      itemBuilder: (context, index) {
+                        final pasien = provider.patientModel!.data![index];
+                        return pasienCard(
+                            context: context,
+                            id: pasien.id!,
+                            nama: pasien.name!,
+                            noRekamMedis: pasien.medicalRecord!);
+                      },
+                    );
+                  }
                 },
               ),
             ),
