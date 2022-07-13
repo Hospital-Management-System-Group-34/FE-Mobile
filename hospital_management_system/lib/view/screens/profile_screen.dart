@@ -146,7 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             await sp.remove('user');
                             await sp.remove('accessToken');
                             await sp.remove('refreshToken');
-                            provider.changeState(LogoutState.standby);
                             if (!mounted) return;
                             Navigator.pushAndRemoveUntil(
                                 context,
@@ -154,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   builder: (context) => const LoginScreen(),
                                 ),
                                 (route) => false);
+                            provider.changeState(LogoutState.standby);
                           }
                         },
                         icon: SvgPicture.asset('assets/logout.svg'),
