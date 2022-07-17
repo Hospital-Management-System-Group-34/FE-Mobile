@@ -157,6 +157,8 @@ class MedicalRecords {
   String? type;
   String? history;
   String? diagnosis;
+  String? drugAllergyHistory;
+  String? drugTherapy;
   String? height;
   String? weight;
   String? systole;
@@ -173,6 +175,8 @@ class MedicalRecords {
       this.type,
       this.history,
       this.diagnosis,
+      this.drugAllergyHistory,
+      this.drugTherapy,
       this.height,
       this.weight,
       this.systole,
@@ -189,6 +193,8 @@ class MedicalRecords {
     type = json['type'];
     history = json['history'];
     diagnosis = json['diagnosis'];
+    drugAllergyHistory = json['drugAllergyHistory'];
+    drugTherapy = json['drugTherapy'];
     height = json['height'];
     weight = json['weight'];
     systole = json['systole'];
@@ -207,6 +213,8 @@ class MedicalRecords {
     data['type'] = type;
     data['history'] = history;
     data['diagnosis'] = diagnosis;
+    data['drugAllergyHistory'] = drugAllergyHistory;
+    data['drugTherapy'] = drugTherapy;
     data['height'] = height;
     data['weight'] = weight;
     data['systole'] = systole;
