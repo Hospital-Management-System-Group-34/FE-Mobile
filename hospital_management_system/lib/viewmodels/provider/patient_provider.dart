@@ -11,7 +11,6 @@ class PatientProvider extends ChangeNotifier {
   PatientState get state => _state;
   final HospitalApi hospitalApi = HospitalApi();
   PatientModel? patientModel;
-  PatientModel? patientModelById;
 
   changeState(PatientState s) {
     _state = s;
