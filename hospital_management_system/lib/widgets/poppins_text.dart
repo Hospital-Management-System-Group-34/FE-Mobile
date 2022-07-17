@@ -187,6 +187,7 @@ class PoppinsText {
 
   static neutral5Bold(String text, double fontSize) {
     return Text(text,
+        overflow: TextOverflow.ellipsis,
         style: GoogleFonts.poppins(
           color: MyColors.neutral5(),
           fontWeight: FontWeight.w700,
