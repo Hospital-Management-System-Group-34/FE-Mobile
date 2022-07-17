@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hospital_management_system/models/clinic_model.dart';
 import 'package:hospital_management_system/models/patient_id_model.dart';
 import 'package:hospital_management_system/services/hospital_api.dart';
+import 'package:hospital_management_system/viewmodels/provider/clinic_provider.dart';
 import 'package:hospital_management_system/widgets/dialog_pasien.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
 
 Widget pasienCard(
     {required String nama,
     required String noRekamMedis,
     required String id,
     required BuildContext context}) {
-  late PatientModelById patientModelById;
-  late ClinicModel clinicModel;
   String poli = '-';
   final HospitalApi hospitalApi = HospitalApi();
 
@@ -48,53 +47,57 @@ Widget pasienCard(
           bottom: 0,
           right: 0,
           left: 0,
-          child: ElevatedButton(
-            onPressed: () async {
-              patientModelById = await hospitalApi.getPatientById(id);
-              clinicModel = await hospitalApi.getClinic();
+          child: Consumer<ClinicProvider>(
+            builder: (context, provider, _) {
+              return ElevatedButton(
+                onPressed: () async {
+                  PatientModelById patientModelById =
+                      await hospitalApi.getPatientById(id);
+                  provider.clinicModel?.data?.forEach((element) {
+                    if (patientModelById.data!.sessions!.isNotEmpty) {
+                      if (element.id ==
+                          patientModelById.data?.sessions?.last.clinicID) {
+                        poli = element.name.toString();
+                      }
+                    }
+                  });
 
-              clinicModel.data?.forEach((element) {
-                if (patientModelById.data!.sessions!.isNotEmpty) {
-                  if (element.id ==
-                      patientModelById.data?.sessions?.last.clinicID) {
-                    poli = element.name.toString();
-                  }
-                }
-              });
-
-              if (patientModelById.code != 200) {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    content: Center(
-                      child: Text('Error'),
-                    ),
-                  ),
-                );
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (context) => dialogPasien(
+                  if (patientModelById.code != 200) {
+                    showDialog(
                       context: context,
-                      nik: patientModelById.data!.nik.toString(),
-                      noRekamMedis: noRekamMedis,
-                      poli: poli,
-                      nama: nama,
-                      jenisKelamin: patientModelById.data!.gender.toString(),
-                      handphone: patientModelById.data!.phone.toString(),
-                      keluhan: patientModelById.data!.sessions!.isNotEmpty
-                          ? patientModelById.data!.sessions!.last.complaint
-                              .toString()
-                          : '-'),
-                );
-              }
+                      builder: (context) => const AlertDialog(
+                        content: Center(
+                          child: Text('Error'),
+                        ),
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => dialogPasien(
+                          context: context,
+                          nik: patientModelById.data!.nik.toString(),
+                          noRekamMedis: noRekamMedis,
+                          poli: poli,
+                          nama: nama,
+                          jenisKelamin:
+                              patientModelById.data!.gender.toString(),
+                          handphone: patientModelById.data!.phone.toString(),
+                          keluhan: patientModelById.data!.sessions!.isNotEmpty
+                              ? patientModelById.data!.sessions!.last.complaint
+                                  .toString()
+                              : '-'),
+                    );
+                  }
+                },
+                child: PoppinsText.whiteMedium('Lihat Detail Pasien', 10),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  primary: MyColors.blue(),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              );
             },
-            child: PoppinsText.whiteMedium('Lihat Detail Pasien', 10),
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: MyColors.blue(),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
           ),
         ),
       ],

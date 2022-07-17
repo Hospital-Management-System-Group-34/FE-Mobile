@@ -1,21 +1,58 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hospital_management_system/view/screens/login_screen.dart';
 import 'package:hospital_management_system/viewmodels/provider/auth_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/image_provider.dart';
 import 'package:hospital_management_system/widgets/dialog_auth.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String userName;
+  const ProfileScreen({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Future pickImage() async {
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final i = File(image.path);
+      sp.setString('image', image.path);
+      if (!mounted) return;
+      Provider.of<MyImageProvider>(context, listen: false).changeImage(i);
+    } on PlatformException catch (e) {
+      log(e.toString());
+    }
+  }
+
+  void checkImage() async {
+    var sp = await SharedPreferences.getInstance();
+    var i = sp.getString('image');
+    if (i != null) {
+      if (!mounted) return;
+      Provider.of<MyImageProvider>(context, listen: false).changeImage(File(i));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkImage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,20 +76,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Stack(
                     children: [
-                      CircleAvatar(
-                        radius: 60,
-                        backgroundColor: MyColors.neutral4(),
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                          color: MyColors.neutral5(),
+                      Consumer<MyImageProvider>(
+                        builder: (context, provider, _) => CircleAvatar(
+                          radius: 60,
+                          backgroundColor: MyColors.neutral4(),
+                          backgroundImage: provider.image != null
+                              ? FileImage(provider.image!)
+                              : null,
+                          child: provider.image != null
+                              ? null
+                              : Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: MyColors.neutral5(),
+                                ),
                         ),
                       ),
                       Positioned(
                         bottom: -1,
                         right: -12,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            pickImage();
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromARGB(255, 9, 194, 222),
                             elevation: 0,
@@ -80,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  PoppinsText.blueBold('Keshya Valerie Sky', 16),
+                  PoppinsText.blueBold(widget.userName, 16),
                   const SizedBox(height: 5),
                   PoppinsText.neutral5Bold('Dokter Umum', 12),
                 ],

@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hospital_management_system/models/patient_id_model.dart';
+import 'package:hospital_management_system/view/screens/rekam_medis_screen.dart';
 import 'package:hospital_management_system/widgets/custom_disabled_textfield.dart';
 import 'package:hospital_management_system/widgets/custom_textfield.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
 class ProsesPasienScreen extends StatefulWidget {
-  const ProsesPasienScreen({Key? key}) : super(key: key);
+  final PatientModelById patientModelById;
+  final String nik;
+  final String noRekamMedis;
+  final String poli;
+  final String nama;
+  final String jenisKelamin;
+  final String handphone;
+  final String keluhan;
+
+  const ProsesPasienScreen(
+      {Key? key,
+      required this.nik,
+      required this.noRekamMedis,
+      required this.poli,
+      required this.nama,
+      required this.jenisKelamin,
+      required this.handphone,
+      required this.keluhan,
+      required this.patientModelById})
+      : super(key: key);
 
   @override
   State<ProsesPasienScreen> createState() => _ProsesPasienScreenState();
@@ -125,7 +146,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('012342385482001'),
+            myDisabledTextField(widget.nik),
             const SizedBox(
               height: 10,
             ),
@@ -133,7 +154,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('PS.19375181'),
+            myDisabledTextField(widget.noRekamMedis),
             const SizedBox(
               height: 10,
             ),
@@ -141,7 +162,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('UMUM'),
+            myDisabledTextField(widget.poli),
             const SizedBox(
               height: 10,
             ),
@@ -149,7 +170,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Cassandra Winter'),
+            myDisabledTextField(widget.nama),
             const SizedBox(
               height: 10,
             ),
@@ -157,7 +178,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Perempuan'),
+            myDisabledTextField(widget.jenisKelamin),
             const SizedBox(
               height: 10,
             ),
@@ -165,7 +186,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('082134567399'),
+            myDisabledTextField(widget.handphone),
             const SizedBox(
               height: 10,
             ),
@@ -173,7 +194,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Batuk Pilek'),
+            myDisabledTextField(widget.keluhan),
             const SizedBox(
               height: 30,
             ),
@@ -200,7 +221,15 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
                   )
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RekamMedisScreen(
+                          noRekamMedis: widget.noRekamMedis,
+                          patientModelById: widget.patientModelById),
+                    ));
+              },
             ),
             const SizedBox(
               height: 30,

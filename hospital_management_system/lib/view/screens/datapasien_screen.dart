@@ -80,7 +80,9 @@ class _DataPasienState extends State<DataPasien> {
                     );
                   } else {
                     return GridView.builder(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics(),
+                      ),
                       padding: EdgeInsets.zero,
                       itemCount: provider.patientModel?.data?.length,
                       gridDelegate:
@@ -89,7 +91,8 @@ class _DataPasienState extends State<DataPasien> {
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16),
                       itemBuilder: (context, index) {
-                        final pasien = provider.patientModel!.data![index];
+                        final pasien = provider.patientModel!.data![
+                            provider.patientModel!.data!.length - (index + 1)];
                         return pasienCard(
                             context: context,
                             id: pasien.id!,

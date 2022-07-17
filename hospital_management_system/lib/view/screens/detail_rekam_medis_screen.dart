@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hospital_management_system/models/patient_id_model.dart';
 import 'package:hospital_management_system/widgets/custom_disabled_textfield.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
 class DetailRekamMedis extends StatefulWidget {
-  const DetailRekamMedis({Key? key}) : super(key: key);
+  final MedicalRecords medicalRecords;
+  final String tanggalSesi;
+  const DetailRekamMedis(
+      {Key? key, required this.medicalRecords, required this.tanggalSesi})
+      : super(key: key);
 
   @override
   State<DetailRekamMedis> createState() => _DetailRekamMedisState();
@@ -35,8 +40,8 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
                 borderRadius: BorderRadius.circular(5),
                 color: MyColors.neutral3(),
               ),
-              child:
-                  PoppinsText.neutral6SemiBold('Tanggal Sesi: 27 Mei 2022', 14),
+              child: PoppinsText.neutral6SemiBold(
+                  'Tanggal Sesi: ${widget.tanggalSesi}', 14),
             ),
             const SizedBox(
               height: 20,
@@ -60,7 +65,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('Terindikasi Influenza'),
+          myDisabledTextField(widget.medicalRecords.history!),
           const SizedBox(
             height: 10,
           ),
@@ -68,7 +73,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('Tidak Ada'),
+          myDisabledTextField('-'),
           const SizedBox(
             height: 10,
           ),
@@ -76,7 +81,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('Paracetamol'),
+          myDisabledTextField('-'),
           const SizedBox(
             height: 10,
           ),
@@ -84,7 +89,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('Influenza'),
+          myDisabledTextField(widget.medicalRecords.diagnosis!),
           const SizedBox(
             height: 10,
           ),
@@ -98,7 +103,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    myDisabledTextField('160'),
+                    myDisabledTextField(widget.medicalRecords.height!),
                     const SizedBox(
                       height: 10,
                     ),
@@ -113,7 +118,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    myDisabledTextField('52'),
+                    myDisabledTextField(widget.medicalRecords.weight!),
                     const SizedBox(
                       height: 10,
                     ),
@@ -136,7 +141,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    myDisabledTextField('90'),
+                    myDisabledTextField(widget.medicalRecords.systole!),
                     const SizedBox(
                       height: 10,
                     ),
@@ -151,7 +156,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    myDisabledTextField('60'),
+                    myDisabledTextField(widget.medicalRecords.diastole!),
                     const SizedBox(
                       height: 10,
                     ),
@@ -168,7 +173,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('36'),
+          myDisabledTextField(widget.medicalRecords.temperature!),
           const SizedBox(
             height: 10,
           ),
@@ -176,7 +181,7 @@ class _DetailRekamMedisState extends State<DetailRekamMedis> {
           const SizedBox(
             height: 10,
           ),
-          myDisabledTextField('Rawat Jalan'),
+          myDisabledTextField(widget.medicalRecords.status!),
           const SizedBox(
             height: 30,
           ),

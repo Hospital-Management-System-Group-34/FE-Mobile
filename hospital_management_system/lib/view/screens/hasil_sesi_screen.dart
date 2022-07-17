@@ -4,7 +4,44 @@ import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
 class HasilSesiScreen extends StatefulWidget {
-  const HasilSesiScreen({Key? key}) : super(key: key);
+  final String alergi;
+  final String terapiObat;
+  final String diagnosa;
+  final String tinggi;
+  final String berat;
+  final String systole;
+  final String diastole;
+  final String suhu;
+  final String status;
+  final String nik;
+  final String noRekamMedis;
+  final String poli;
+  final String nama;
+  final String jenisKelamin;
+  final String handphone;
+  final String keluhan;
+  final String anamnesa;
+
+  const HasilSesiScreen(
+      {Key? key,
+      required this.diagnosa,
+      required this.tinggi,
+      required this.berat,
+      required this.systole,
+      required this.diastole,
+      required this.suhu,
+      required this.status,
+      required this.nik,
+      required this.noRekamMedis,
+      required this.poli,
+      required this.nama,
+      required this.jenisKelamin,
+      required this.handphone,
+      required this.keluhan,
+      required this.anamnesa,
+      required this.alergi,
+      required this.terapiObat})
+      : super(key: key);
 
   @override
   State<HasilSesiScreen> createState() => _HasilSesiScreenState();
@@ -107,7 +144,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('012342385482001'),
+            myDisabledTextField(widget.nik),
             const SizedBox(
               height: 10,
             ),
@@ -115,7 +152,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('PS.19375181'),
+            myDisabledTextField(widget.noRekamMedis),
             const SizedBox(
               height: 10,
             ),
@@ -123,7 +160,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('UMUM'),
+            myDisabledTextField(widget.poli),
             const SizedBox(
               height: 10,
             ),
@@ -131,7 +168,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Cassandra Winter'),
+            myDisabledTextField(widget.nama),
             const SizedBox(
               height: 10,
             ),
@@ -139,7 +176,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Perempuan'),
+            myDisabledTextField(widget.jenisKelamin),
             const SizedBox(
               height: 10,
             ),
@@ -147,7 +184,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('082134567399'),
+            myDisabledTextField(widget.handphone),
             const SizedBox(
               height: 10,
             ),
@@ -155,7 +192,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Batuk Pilek'),
+            myDisabledTextField(widget.keluhan),
             const SizedBox(
               height: 30,
             ),
@@ -179,7 +216,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Terindikasi Influenza'),
+            myDisabledTextField(widget.anamnesa),
             const SizedBox(
               height: 10,
             ),
@@ -187,7 +224,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Tidak Ada'),
+            myDisabledTextField(widget.alergi),
             const SizedBox(
               height: 10,
             ),
@@ -195,7 +232,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Paracetamol'),
+            myDisabledTextField(widget.terapiObat),
             const SizedBox(
               height: 10,
             ),
@@ -203,7 +240,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Influenza'),
+            myDisabledTextField(widget.diagnosa),
             const SizedBox(
               height: 10,
             ),
@@ -217,7 +254,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      myDisabledTextField('160'),
+                      myDisabledTextField(widget.tinggi),
                       const SizedBox(
                         height: 10,
                       ),
@@ -232,7 +269,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      myDisabledTextField('52'),
+                      myDisabledTextField(widget.berat),
                       const SizedBox(
                         height: 10,
                       ),
@@ -255,7 +292,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      myDisabledTextField('90'),
+                      myDisabledTextField(widget.systole),
                       const SizedBox(
                         height: 10,
                       ),
@@ -270,7 +307,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      myDisabledTextField('60'),
+                      myDisabledTextField(widget.diastole),
                       const SizedBox(
                         height: 10,
                       ),
@@ -287,7 +324,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('36'),
+            myDisabledTextField(widget.suhu),
             const SizedBox(
               height: 10,
             ),
@@ -295,7 +332,7 @@ class _HasilSesiScreenState extends State<HasilSesiScreen>
             const SizedBox(
               height: 10,
             ),
-            myDisabledTextField('Rawat Jalan'),
+            myDisabledTextField(widget.status),
             const SizedBox(
               height: 30,
             ),

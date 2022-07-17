@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hospital_management_system/models/patient_id_model.dart';
+import 'package:hospital_management_system/view/screens/detail_rekam_medis_screen.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
 
-Widget rekamMedisCard() {
+Widget rekamMedisCard(
+    {required BuildContext context,
+    required MedicalRecords medicalRecords,
+    required Sessions sessions,
+    required String poli}) {
   return Container(
     height: 82,
     width: double.infinity,
@@ -35,7 +41,7 @@ Widget rekamMedisCard() {
                   children: <TextSpan>[
                     const TextSpan(text: 'Tanggal Sesi: '),
                     TextSpan(
-                      text: '27 Mei 2022',
+                      text: sessions.date,
                       style: blueTextStyle(),
                     ),
                   ],
@@ -47,7 +53,7 @@ Widget rekamMedisCard() {
                   children: <TextSpan>[
                     const TextSpan(text: 'Poli: '),
                     TextSpan(
-                      text: 'Umum',
+                      text: poli,
                       style: blueTextStyle(),
                     ),
                   ],
@@ -66,7 +72,16 @@ Widget rekamMedisCard() {
               color: MyColors.white(),
               size: 34,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailRekamMedis(
+                      medicalRecords: medicalRecords,
+                      tanggalSesi: sessions.date!,
+                    ),
+                  ));
+            },
           )
         ],
       ),

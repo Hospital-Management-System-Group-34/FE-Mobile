@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hospital_management_system/services/hospital_api.dart';
+import 'package:hospital_management_system/view/screens/hasil_sesi_screen.dart';
 import 'package:hospital_management_system/view/screens/proses_pasien_screen.dart';
+import 'package:hospital_management_system/viewmodels/provider/clinic_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/patient_by_id_provider.dart';
+import 'package:hospital_management_system/widgets/dialog_pasien.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:provider/provider.dart';
 
-Widget jadwalHomeCard() {
+Widget jadwalHomeCard(
+    {required String nama,
+    required String noRekamMedis,
+    required String noAntrian,
+    required String tanggal}) {
   return Container(
     height: 125,
     width: double.infinity,
@@ -23,7 +33,7 @@ Widget jadwalHomeCard() {
               PoppinsText.whiteMedium('Nama Pasien', 12),
               SizedBox(
                 width: 180,
-                child: PoppinsText.whiteSemiBold('Cassandra Winter steve', 14),
+                child: PoppinsText.whiteSemiBold(nama, 14),
               ),
             ],
           ),
@@ -34,10 +44,10 @@ Widget jadwalHomeCard() {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PoppinsText.whiteMedium('No. Pasien', 12),
+              PoppinsText.whiteMedium('No. Rekam Medis', 12),
               SizedBox(
                 width: 82,
-                child: PoppinsText.whiteSemiBold('1098361345', 14),
+                child: PoppinsText.whiteSemiBold(noRekamMedis, 14),
               ),
             ],
           ),
@@ -49,11 +59,11 @@ Widget jadwalHomeCard() {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(flex: 1, child: antrian()),
+              Flexible(flex: 1, child: antrian(noAntrian)),
               const SizedBox(
                 width: 15,
               ),
-              Flexible(flex: 2, child: jadwal()),
+              Flexible(flex: 2, child: jadwal(tanggal)),
             ],
           ),
         ),
@@ -62,7 +72,15 @@ Widget jadwalHomeCard() {
   );
 }
 
-Widget jadwalAkanDatangCard(BuildContext context) {
+Widget jadwalAkanDatangCard({
+  required BuildContext context,
+  required String patientId,
+  required String sessionId,
+  required String nama,
+  required String noRekamMedis,
+  required String antri,
+  required String tanggal,
+}) {
   return Container(
     height: 180,
     width: double.infinity,
@@ -81,8 +99,7 @@ Widget jadwalAkanDatangCard(BuildContext context) {
               PoppinsText.whiteMedium('Nama Pasien', 12),
               SizedBox(
                 width: 180,
-                child: PoppinsText.whiteSemiBold(
-                    'Cassandra Winter steve john', 14),
+                child: PoppinsText.whiteSemiBold(nama, 14),
               ),
             ],
           ),
@@ -93,10 +110,10 @@ Widget jadwalAkanDatangCard(BuildContext context) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              PoppinsText.whiteMedium('No. Pasien', 12),
+              PoppinsText.whiteMedium('No. Rekam Medis', 12),
               SizedBox(
                 width: 82,
-                child: PoppinsText.whiteSemiBold('1098361345', 14),
+                child: PoppinsText.whiteSemiBold(noRekamMedis, 14),
               ),
             ],
           ),
@@ -108,11 +125,11 @@ Widget jadwalAkanDatangCard(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(flex: 1, child: antrian()),
+              Flexible(flex: 1, child: antrian(antri)),
               const SizedBox(
                 width: 15,
               ),
-              Flexible(flex: 2, child: jadwal()),
+              Flexible(flex: 2, child: jadwal(tanggal)),
             ],
           ),
         ),
@@ -145,19 +162,47 @@ Widget jadwalAkanDatangCard(BuildContext context) {
                   width: 10,
                 ),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProsesPasienScreen(),
-                          ));
+                  child: Consumer2<PatientByIdProvider, ClinicProvider>(
+                    builder: (context, providerPatient, providerClinic, child) {
+                      return ElevatedButton(
+                        onPressed: () async {
+                          await providerPatient
+                              .getPatientById(patientId)
+                              .then((value) {
+                            var dataSesi = providerPatient
+                                .patientModelById!.data!.sessions!
+                                .singleWhere(
+                                    (element) => element.id == sessionId);
+                            var poli = providerClinic.clinicModel!.data!
+                                .singleWhere((element) =>
+                                    element.id == dataSesi.clinicID);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProsesPasienScreen(
+                                    patientModelById:
+                                        providerPatient.patientModelById!,
+                                    nik: providerPatient
+                                        .patientModelById!.data!.id!,
+                                    noRekamMedis: noRekamMedis,
+                                    poli: poli.name!,
+                                    nama: nama,
+                                    jenisKelamin: providerPatient
+                                        .patientModelById!.data!.gender!,
+                                    handphone: providerPatient
+                                        .patientModelById!.data!.phone!,
+                                    keluhan: dataSesi.complaint!),
+                              ),
+                            );
+                          });
+                        },
+                        child: PoppinsText.blueSemiBold('Proses Pasien', 12),
+                        style: ElevatedButton.styleFrom(
+                          primary: MyColors.white(),
+                          elevation: 0,
+                        ),
+                      );
                     },
-                    child: PoppinsText.blueSemiBold('Proses Pasien', 12),
-                    style: ElevatedButton.styleFrom(
-                      primary: MyColors.white(),
-                      elevation: 0,
-                    ),
                   ),
                 ),
               ],
@@ -167,7 +212,13 @@ Widget jadwalAkanDatangCard(BuildContext context) {
   );
 }
 
-Widget jadwalSelesaiCard() {
+Widget jadwalSelesaiCard({
+  required BuildContext context,
+  required String nama,
+  required String noRekamMedis,
+  required String patientId,
+  required String sessionId,
+}) {
   return Container(
     height: 140,
     width: double.infinity,
@@ -188,18 +239,17 @@ Widget jadwalSelesaiCard() {
                   PoppinsText.whiteMedium('Nama Pasien', 12),
                   SizedBox(
                     width: 180,
-                    child: PoppinsText.whiteSemiBold(
-                        'Cassandra Winter steve udin', 14),
+                    child: PoppinsText.whiteSemiBold(nama, 14),
                   ),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PoppinsText.whiteMedium('No Pasien', 12),
+                  PoppinsText.whiteMedium('No. Rekam Medis', 12),
                   SizedBox(
                     width: 82,
-                    child: PoppinsText.whiteSemiBold('123897382', 14),
+                    child: PoppinsText.whiteSemiBold(noRekamMedis, 14),
                   ),
                 ],
               ),
@@ -211,13 +261,54 @@ Widget jadwalSelesaiCard() {
           Expanded(
             child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: PoppinsText.blueSemiBold('Lihat Hasil Sesi', 12),
-                style: ElevatedButton.styleFrom(
-                  primary: MyColors.white(),
-                  elevation: 0,
-                ),
+              child: Consumer2<PatientByIdProvider, ClinicProvider>(
+                builder: (context, provider, providerClinic, _) {
+                  return ElevatedButton(
+                    onPressed: () async {
+                      await provider.getPatientById(patientId).then((value) {
+                        var dataMR = provider
+                            .patientModelById!.data!.medicalRecords!
+                            .singleWhere(
+                                (element) => element.sessionID == sessionId);
+                        var dataSesi = provider
+                            .patientModelById!.data!.sessions!
+                            .singleWhere((element) => element.id == sessionId);
+                        var poli = providerClinic.clinicModel!.data!
+                            .singleWhere(
+                                (element) => element.id == dataSesi.clinicID);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HasilSesiScreen(
+                                  nama: nama,
+                                  noRekamMedis: noRekamMedis,
+                                  jenisKelamin:
+                                      provider.patientModelById!.data!.gender!,
+                                  handphone:
+                                      provider.patientModelById!.data!.phone!,
+                                  nik: provider.patientModelById!.data!.nik!,
+                                  poli: poli.name!,
+                                  alergi: dataMR.drugAllergyHistory!,
+                                  terapiObat: dataMR.drugTherapy!,
+                                  anamnesa: dataMR.history!,
+                                  keluhan: dataSesi.complaint!,
+                                  diagnosa: dataMR.diagnosis!,
+                                  tinggi: dataMR.height!,
+                                  berat: dataMR.weight!,
+                                  systole: dataMR.systole!,
+                                  diastole: dataMR.diastole!,
+                                  suhu: dataMR.temperature!,
+                                  status: dataMR.status!),
+                            ));
+                      });
+                    },
+                    child: PoppinsText.blueSemiBold('Lihat Hasil Sesi', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.white(),
+                      elevation: 0,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -227,7 +318,12 @@ Widget jadwalSelesaiCard() {
   );
 }
 
-Widget jadwalBatalCard() {
+Widget jadwalBatalCard({
+  required String nama,
+  required String noRekamMedis,
+  required String id,
+  required BuildContext context,
+}) {
   return Container(
     height: 140,
     width: double.infinity,
@@ -248,18 +344,17 @@ Widget jadwalBatalCard() {
                   PoppinsText.whiteMedium('Nama Pasien', 12),
                   SizedBox(
                     width: 180,
-                    child: PoppinsText.whiteSemiBold(
-                        'Cassandra Winter steve udin', 14),
+                    child: PoppinsText.whiteSemiBold(nama, 14),
                   ),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PoppinsText.whiteMedium('No Pasien', 12),
+                  PoppinsText.whiteMedium('No. Rekam Medis', 12),
                   SizedBox(
                     width: 82,
-                    child: PoppinsText.whiteSemiBold('123897382', 14),
+                    child: PoppinsText.whiteSemiBold(noRekamMedis, 14),
                   ),
                 ],
               ),
@@ -271,13 +366,61 @@ Widget jadwalBatalCard() {
           Expanded(
             child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: PoppinsText.greySemiBold('Lihat Hasil Sesi', 12),
-                style: ElevatedButton.styleFrom(
-                  primary: MyColors.white(),
-                  elevation: 0,
-                ),
+              child: Consumer<ClinicProvider>(
+                builder: (context, provider, _) {
+                  return ElevatedButton(
+                    child: PoppinsText.greySemiBold('Lihat Detail Pasien', 12),
+                    style: ElevatedButton.styleFrom(
+                      primary: MyColors.white(),
+                      elevation: 0,
+                    ),
+                    onPressed: () async {
+                      String poli = '-';
+                      HospitalApi hospitalApi = HospitalApi();
+                      var patientModelById =
+                          await hospitalApi.getPatientById(id);
+                      provider.clinicModel?.data?.forEach((element) {
+                        if (patientModelById.data!.sessions!.isNotEmpty) {
+                          if (element.id ==
+                              patientModelById.data?.sessions?.last.clinicID) {
+                            poli = element.name.toString();
+                          }
+                        }
+                      });
+
+                      if (patientModelById.code != 200) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const AlertDialog(
+                            content: Center(
+                              child: Text('Error'),
+                            ),
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => dialogPasien(
+                              context: context,
+                              nik: patientModelById.data!.nik.toString(),
+                              noRekamMedis: noRekamMedis,
+                              poli: poli,
+                              nama: nama,
+                              jenisKelamin:
+                                  patientModelById.data!.gender.toString(),
+                              handphone:
+                                  patientModelById.data!.phone.toString(),
+                              keluhan:
+                                  patientModelById.data!.sessions!.isNotEmpty
+                                      ? patientModelById
+                                          .data!.sessions!.last.complaint
+                                          .toString()
+                                      : '-'),
+                        );
+                      }
+                    },
+                  );
+                },
               ),
             ),
           ),
@@ -287,7 +430,7 @@ Widget jadwalBatalCard() {
   );
 }
 
-Widget antrian() {
+Widget antrian(String no) {
   return Container(
     alignment: Alignment.center,
     height: 35,
@@ -297,12 +440,12 @@ Widget antrian() {
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: PoppinsText.whiteBold('UM01', 12),
+      child: PoppinsText.whiteBold(no, 12),
     ),
   );
 }
 
-Widget jadwal() {
+Widget jadwal(String date) {
   return Container(
     height: 35,
     decoration: BoxDecoration(
@@ -321,7 +464,7 @@ Widget jadwal() {
           const SizedBox(
             width: 6,
           ),
-          PoppinsText.whiteMedium('Minggu, 27 Mei 2022', 12),
+          PoppinsText.whiteMedium(date, 12),
         ],
       ),
     ),
