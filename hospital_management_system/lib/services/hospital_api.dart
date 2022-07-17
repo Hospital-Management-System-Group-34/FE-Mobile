@@ -4,15 +4,17 @@ import 'package:hospital_management_system/models/authentication_model.dart';
 import 'package:hospital_management_system/models/clinic_model.dart';
 import 'package:hospital_management_system/models/patient_id_model.dart';
 import 'package:hospital_management_system/models/patient_model.dart';
+import 'package:hospital_management_system/models/session_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HospitalApi {
   final Dio _dio = Dio();
-  final String _baseUrl = 'http://18.143.63.202:9000/';
+  final String _baseUrl = 'https://shaggy-badger-99.a276.dcdg.xyz/';
   AuthModel? dataAuth;
   PatientModel? dataPatient;
   PatientModelById? dataPatientById;
   ClinicModel? dataClinic;
+  SessionModel? dataSession;
 
   Future login(String id, String password) async {
     dataAuth = null;
@@ -121,8 +123,12 @@ class HospitalApi {
       dataPatientById = PatientModelById.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null) {
-        dataPatientById = PatientModelById.fromJson(e.response?.data);
-        log(e.response?.data['message']);
+        if (e.response!.statusCode == 503 || e.response!.statusCode == 500) {
+          log(e.response.toString());
+        } else {
+          dataPatientById = PatientModelById.fromJson(e.response?.data);
+          log(e.response?.data['message']);
+        }
       } else {
         log(e.message);
       }
@@ -144,13 +150,40 @@ class HospitalApi {
       dataClinic = ClinicModel.fromJson(response.data);
     } on DioError catch (e) {
       if (e.response != null) {
-        dataClinic = ClinicModel.fromJson(e.response?.data);
-        log(e.response?.data['message']);
+        if (e.response!.statusCode == 503 || e.response!.statusCode == 500) {
+          log(e.response.toString());
+        } else {
+          dataClinic = ClinicModel.fromJson(e.response?.data);
+          log(e.response?.data['message']);
+        }
       } else {
         log(e.message);
       }
     }
     log('${dataClinic?.code}');
     return dataClinic;
+  }
+
+  Future getSession() async {
+    dataSession = null;
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final response = await _dio.get(
+        '${_baseUrl}sessions',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${sp.getString('accessToken')}'},
+        ),
+      );
+      dataSession = SessionModel.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        dataSession = SessionModel.fromJson(e.response?.data);
+        log(e.response?.data['message']);
+      } else {
+        log(e.message);
+      }
+    }
+    log('${dataSession?.code}');
+    return dataSession;
   }
 }
