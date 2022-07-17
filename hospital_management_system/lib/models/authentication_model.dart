@@ -25,18 +25,21 @@ class AuthModel {
 class Data {
   String? accessToken;
   String? refreshToken;
+  String? userName;
 
-  Data({this.accessToken, this.refreshToken});
+  Data({this.accessToken, this.refreshToken, this.userName});
 
   Data.fromJson(Map<String, dynamic> json) {
     accessToken = json['accessToken'];
     refreshToken = json['refreshToken'];
+    userName = json['userName'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['accessToken'] = accessToken;
     data['refreshToken'] = refreshToken;
+    data['userName'] = userName;
     return data;
   }
 }

@@ -57,7 +57,9 @@ class _SplashScreenState extends State<SplashScreen> {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
+                builder: (context) => HomeScreen(
+                  userName: '${sp.getString('user')}',
+                ),
               ),
               (route) => false,
             );

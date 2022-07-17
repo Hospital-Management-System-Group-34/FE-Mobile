@@ -189,7 +189,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         sp = await SharedPreferences
                                             .getInstance();
                                         sp.setBool('loginStatus', true);
-                                        sp.setString('user', controllerId.text);
+                                        sp.setString('user',
+                                            '${provider.loginModel?.data?.userName}');
                                         sp.setString('accessToken',
                                             '${provider.loginModel?.data?.accessToken}');
                                         sp.setString('refreshToken',
@@ -198,8 +199,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomeScreen(),
+                                            builder: (context) => HomeScreen(
+                                              userName:
+                                                  '${provider.loginModel?.data?.userName}',
+                                            ),
                                           ),
                                           (route) => false,
                                         );
