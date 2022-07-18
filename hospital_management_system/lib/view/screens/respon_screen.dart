@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hospital_management_system/view/screens/jadwal_screen.dart';
+import 'package:hospital_management_system/viewmodels/provider/patient_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/session_provider.dart';
 import 'package:hospital_management_system/widgets/pop_up_berhasil_simpan.dart';
+import 'package:provider/provider.dart';
 
 class ResponScreen extends StatefulWidget {
   const ResponScreen({Key? key}) : super(key: key);
@@ -61,6 +65,26 @@ class _ResponScreenState extends State<ResponScreen> {
         });
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<PatientProvider>(context, listen: false).getPatient();
+      Provider.of<SessionProvider>(context, listen: false).getSession();
+      Future.delayed(
+        const Duration(milliseconds: 4000),
+        () {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const JadwalScreen(),
+              ),
+              (route) => route.isFirst);
+        },
+      );
+    });
   }
 
   @override
