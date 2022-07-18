@@ -6,8 +6,11 @@ import 'package:hospital_management_system/viewmodels/provider/auth_provider.dar
 import 'package:hospital_management_system/widgets/dialog_auth.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../widgets/transition.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -225,12 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           if (!mounted) return;
                                           Navigator.pushAndRemoveUntil(
                                             context,
-                                            MaterialPageRoute(
-                                              builder: (context) => HomeScreen(
-                                                userName:
-                                                    '${provider.loginModel?.data?.userName}',
-                                              ),
-                                            ),
+                                            transition(type: PageTransitionType.fade, page: HomeScreen(userName: "${provider.loginModel?.data?.userName}"),),
                                             (route) => false,
                                           );
                                         }
