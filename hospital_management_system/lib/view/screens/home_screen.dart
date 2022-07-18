@@ -226,9 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const DataPasien(),
-                          ),
+                         transition(type: PageTransitionType.fade, page: DataPasien(),),
                         );
                       },
                       child: PoppinsText.blue('Lihat semua', 12),
