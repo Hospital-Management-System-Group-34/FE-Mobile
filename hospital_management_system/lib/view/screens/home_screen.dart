@@ -12,8 +12,11 @@ import 'package:hospital_management_system/widgets/jadwal_card.dart';
 import 'package:hospital_management_system/widgets/pasien_card.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../widgets/transition.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -100,11 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(
-                                    userName: widget.userName,
-                                  ),
-                                ));
+                                transition(type: PageTransitionType.fade, page: ProfileScreen(userName: widget.userName),),);
                           },
                         ),
                       ],
