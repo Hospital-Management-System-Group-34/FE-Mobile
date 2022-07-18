@@ -186,4 +186,94 @@ class HospitalApi {
     log('${dataSession?.code}');
     return dataSession;
   }
+
+  Future<Response> activateSession(String sessionId) async {
+    dynamic status;
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final response = await _dio.post(
+        "${_baseUrl}sessions/$sessionId/activate",
+        options: Options(
+          headers: {'Authorization': 'Bearer ${sp.getString('accessToken')}'},
+        ),
+      );
+      status = response;
+    } on DioError catch (e) {
+      if (e.response != null) {
+        status = e.response;
+      } else {
+        log(e.message);
+      }
+    }
+    log('$status');
+    return status;
+  }
+
+  Future<Response> completeSession(
+      String sessionId,
+      String anamnesa,
+      String diagnosis,
+      String alergiObat,
+      String terapiObat,
+      String tinggi,
+      String berat,
+      String sistol,
+      String diastol,
+      String suhu,
+      String statusPulang) async {
+    dynamic status;
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final response = await _dio.post(
+        "${_baseUrl}sessions/$sessionId/complete",
+        options: Options(
+          headers: {'Authorization': 'Bearer ${sp.getString('accessToken')}'},
+        ),
+        data: {
+          "type": "Rawat Jalan",
+          "history": anamnesa,
+          "diagnosis": diagnosis,
+          "drugAllergyHistory": alergiObat,
+          "drugTherapy": terapiObat,
+          "height": tinggi,
+          "weight": berat,
+          "systole": sistol,
+          "diastole": diastol,
+          "temperature": suhu,
+          "status": statusPulang,
+        },
+      );
+      status = response;
+    } on DioError catch (e) {
+      if (e.response != null) {
+        status = e.response;
+      } else {
+        log(e.message);
+      }
+    }
+    log('$status');
+    return status;
+  }
+
+  Future<Response> cancelSession(String sessionId) async {
+    dynamic status;
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final response = await _dio.post(
+        "${_baseUrl}sessions/$sessionId/cancel",
+        options: Options(
+          headers: {'Authorization': 'Bearer ${sp.getString('accessToken')}'},
+        ),
+      );
+      status = response;
+    } on DioError catch (e) {
+      if (e.response != null) {
+        status = e.response;
+      } else {
+        log(e.message);
+      }
+    }
+    log('$status');
+    return status;
+  }
 }

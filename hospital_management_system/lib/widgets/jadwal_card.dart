@@ -5,6 +5,7 @@ import 'package:hospital_management_system/view/screens/hasil_sesi_screen.dart';
 import 'package:hospital_management_system/view/screens/proses_pasien_screen.dart';
 import 'package:hospital_management_system/viewmodels/provider/clinic_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/patient_by_id_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/session_provider.dart';
 import 'package:hospital_management_system/widgets/dialog_pasien.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
 import 'package:hospital_management_system/widgets/warna.dart';
@@ -143,7 +144,7 @@ Widget jadwalAkanDatangCard({
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      popUpBatal(context);
+                      popUpBatal(context, sessionId);
                     },
                     child: PoppinsText.whiteSemiBold('Batalkan', 12),
                     style: ElevatedButton.styleFrom(
@@ -180,10 +181,11 @@ Widget jadwalAkanDatangCard({
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProsesPasienScreen(
+                                    sessionId: sessionId,
                                     patientModelById:
                                         providerPatient.patientModelById!,
                                     nik: providerPatient
-                                        .patientModelById!.data!.id!,
+                                        .patientModelById!.data!.nik!,
                                     noRekamMedis: noRekamMedis,
                                     poli: poli.name!,
                                     nama: nama,
@@ -471,7 +473,7 @@ Widget jadwal(String date) {
   );
 }
 
-popUpBatal(BuildContext context) {
+popUpBatal(BuildContext context, String sessionId) {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -492,7 +494,35 @@ popUpBatal(BuildContext context) {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final HospitalApi hospitalApi = HospitalApi();
+                      final navigator = Navigator.of(context);
+                      final provider =
+                          Provider.of<SessionProvider>(context, listen: false);
+                      var response = await hospitalApi.cancelSession(sessionId);
+                      if (response.statusCode == 401) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => dialogError(
+                              context,
+                              'error authorization ${response.statusCode}',
+                              '${response.statusMessage}, Restart kembali aplikasi'),
+                        );
+                      } else if (response.statusCode != 200) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => dialogError(
+                              context,
+                              'active session error ${response.statusCode}',
+                              '${response.statusMessage}, Hubungi teknisi atau Silahkan coba kembali.'),
+                        );
+                      } else {
+                        navigator.pop();
+                        provider.getSession();
+                      }
+                    },
                     child: PoppinsText.blueSemiBold('Ya, batalkan', 12),
                     style: ElevatedButton.styleFrom(
                       primary: MyColors.white(),

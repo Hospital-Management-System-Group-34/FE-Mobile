@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_management_system/models/patient_id_model.dart';
+import 'package:hospital_management_system/services/hospital_api.dart';
 import 'package:hospital_management_system/view/screens/rekam_medis_screen.dart';
+import 'package:hospital_management_system/view/screens/respon_screen.dart';
 import 'package:hospital_management_system/widgets/custom_disabled_textfield.dart';
 import 'package:hospital_management_system/widgets/custom_textfield.dart';
 import 'package:hospital_management_system/widgets/poppins_text.dart';
@@ -16,6 +18,7 @@ class ProsesPasienScreen extends StatefulWidget {
   final String jenisKelamin;
   final String handphone;
   final String keluhan;
+  final String sessionId;
 
   const ProsesPasienScreen(
       {Key? key,
@@ -26,7 +29,8 @@ class ProsesPasienScreen extends StatefulWidget {
       required this.jenisKelamin,
       required this.handphone,
       required this.keluhan,
-      required this.patientModelById})
+      required this.patientModelById,
+      required this.sessionId})
       : super(key: key);
 
   @override
@@ -35,9 +39,9 @@ class ProsesPasienScreen extends StatefulWidget {
 
 class _ProsesPasienScreenState extends State<ProsesPasienScreen>
     with SingleTickerProviderStateMixin {
+  final _formKey = GlobalKey<FormState>();
   var controllerAnamnesa = TextEditingController();
   var controllerTerapiObat = TextEditingController();
-  var controllerTerapiNonObat = TextEditingController();
   var controllerDiagnosa = TextEditingController();
   var controllerTB = TextEditingController();
   var controllerBB = TextEditingController();
@@ -50,9 +54,11 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
   final alergiObatItem = ['Ada', 'Tidak Ada'];
 
   final valueStatPulang = ValueNotifier('');
-  final statPulangItem = ['Rawat Jalan', 'Rawat Inap'];
+  final statPulangItem = ['Rawat Jalan', 'Rawat Inap', 'Pulang'];
 
   String title = 'Detail Pasien';
+
+  final HospitalApi hospitalApi = HospitalApi();
 
   @override
   void initState() {
@@ -247,298 +253,420 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PoppinsText.neutral9Bold('Anamnesa', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            myTextField(
-                controller: controllerAnamnesa,
-                textInputType: TextInputType.text,
-                maxLines: 3,
-                minLines: 1,
-                hintText: 'Isi anamnesa pasien disini'),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Riwayat alergi obat', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            ValueListenableBuilder(
-              valueListenable: valueAlergiObat,
-              builder: (BuildContext context, String value, _) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: MyColors.neutral7(),
-                    ),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      icon: const Icon(Icons.expand_more),
-                      value: (value.isEmpty) ? null : value,
-                      hint: Text(
-                        'Apakah pasien ada alergi obat?',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: MyColors.neutral6(),
-                          fontWeight: FontWeight.w400,
-                        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PoppinsText.neutral9Bold('Anamnesa', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              myTextField(
+                  controller: controllerAnamnesa,
+                  textInputType: TextInputType.text,
+                  maxLines: 3,
+                  minLines: 1,
+                  hintText: 'Isi anamnesa pasien disini'),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Riwayat alergi obat', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              ValueListenableBuilder(
+                valueListenable: valueAlergiObat,
+                builder: (BuildContext context, String value, _) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: MyColors.neutral7(),
                       ),
-                      onChanged: (inputan) =>
-                          valueAlergiObat.value = inputan.toString(),
-                      items: alergiObatItem
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    color: MyColors.black(),
-                                    fontWeight: FontWeight.w400,
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        icon: const Icon(Icons.expand_more),
+                        value: (value.isEmpty) ? null : value,
+                        hint: Text(
+                          'Apakah pasien ada alergi obat?',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: MyColors.neutral6(),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        onChanged: (inputan) =>
+                            valueAlergiObat.value = inputan.toString(),
+                        items: alergiObatItem
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: MyColors.black(),
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                              ))
-                          .toList(),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Terapi obat', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              myTextField(
+                  controller: controllerTerapiObat,
+                  textInputType: TextInputType.text,
+                  maxLines: 3,
+                  minLines: 1,
+                  hintText: 'Isi terapi obat pasien disini'),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Diagnosa', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              myTextField(
+                  controller: controllerDiagnosa,
+                  textInputType: TextInputType.text,
+                  maxLines: 3,
+                  minLines: 1,
+                  hintText: 'Isi diagnosa pasien disini'),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Pemeriksaan Fisik', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        myTextField(
+                            controller: controllerTB,
+                            textInputType: TextInputType.number,
+                            maxLines: 1,
+                            minLines: 1,
+                            hintText: 'Tinggi badan'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        PoppinsText.neutral9Normal('*dalam cm', 14),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Terapi obat', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            myTextField(
-                controller: controllerTerapiObat,
-                textInputType: TextInputType.text,
-                maxLines: 3,
-                minLines: 1,
-                hintText: 'Isi terapi obat pasien disini'),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Terapi non obat', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            myTextField(
-                controller: controllerTerapiNonObat,
-                textInputType: TextInputType.text,
-                maxLines: 3,
-                minLines: 1,
-                hintText: 'Isi terapi non obat pasien disini'),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Diagnosa', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            myTextField(
-                controller: controllerDiagnosa,
-                textInputType: TextInputType.text,
-                maxLines: 3,
-                minLines: 1,
-                hintText: 'Isi diagnosa pasien disini'),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Pemeriksaan Fisik', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
+                  const SizedBox(
+                    width: 28,
+                  ),
+                  Expanded(
+                      child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       myTextField(
-                          controller: controllerTB,
+                          controller: controllerBB,
                           textInputType: TextInputType.number,
                           maxLines: 1,
                           minLines: 1,
-                          hintText: 'Tinggi badan'),
+                          hintText: 'Berat badan'),
                       const SizedBox(
                         height: 10,
                       ),
-                      PoppinsText.neutral9Normal('*dalam cm', 14),
+                      PoppinsText.neutral9Normal('*dalam kg', 14),
                     ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 28,
-                ),
-                Expanded(
+                  ))
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Tekanan Darah', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    myTextField(
-                        controller: controllerBB,
-                        textInputType: TextInputType.number,
-                        maxLines: 1,
-                        minLines: 1,
-                        hintText: 'Berat badan'),
-                    const SizedBox(
-                      height: 10,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        myTextField(
+                            controller: controllerSistole,
+                            textInputType: TextInputType.number,
+                            maxLines: 1,
+                            minLines: 1,
+                            hintText: 'Sistole'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        PoppinsText.neutral9Normal('*dalam mmHg', 14),
+                      ],
                     ),
-                    PoppinsText.neutral9Normal('*dalam kg', 14),
-                  ],
-                ))
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Tekanan Darah', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
+                  ),
+                  const SizedBox(
+                    width: 28,
+                  ),
+                  Expanded(
+                      child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       myTextField(
-                          controller: controllerSistole,
+                          controller: controllerDiastole,
                           textInputType: TextInputType.number,
                           maxLines: 1,
                           minLines: 1,
-                          hintText: 'Sistole'),
+                          hintText: 'Diastole'),
                       const SizedBox(
                         height: 10,
                       ),
                       PoppinsText.neutral9Normal('*dalam mmHg', 14),
                     ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 28,
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    myTextField(
-                        controller: controllerDiastole,
-                        textInputType: TextInputType.number,
-                        maxLines: 1,
-                        minLines: 1,
-                        hintText: 'Diastole'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    PoppinsText.neutral9Normal('*dalam mmHg', 14),
-                  ],
-                ))
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Suhu', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            myTextField(
-                controller: controllerSuhu,
-                textInputType: TextInputType.number,
-                maxLines: 1,
-                minLines: 1,
-                hintText: 'Isi suhu pasien disini'),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.neutral9Bold('Status Pulang', 16),
-            const SizedBox(
-              height: 10,
-            ),
-            ValueListenableBuilder(
-              valueListenable: valueStatPulang,
-              builder: (BuildContext context, String value, _) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: MyColors.neutral7(),
-                    ),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      isExpanded: true,
-                      icon: const Icon(Icons.expand_more),
-                      value: (value.isEmpty) ? null : value,
-                      hint: Text(
-                        'Apakah pasien ada alergi obat?',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: MyColors.neutral6(),
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      onChanged: (inputan) =>
-                          valueStatPulang.value = inputan.toString(),
-                      items: statPulangItem
-                          .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    color: MyColors.black(),
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            PoppinsText.blackMedium(
-                '*Pastikan semua data terisi dengan benar', 14),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(double.infinity, 60),
-                elevation: 0,
-                primary: MyColors.blue(),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PoppinsText.whiteBold('Konfirmasi', 20),
+                  ))
                 ],
               ),
-              onPressed: () {},
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Suhu', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              myTextField(
+                  controller: controllerSuhu,
+                  textInputType: TextInputType.number,
+                  maxLines: 1,
+                  minLines: 1,
+                  hintText: 'Isi suhu pasien disini'),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.neutral9Bold('Status Pulang', 16),
+              const SizedBox(
+                height: 10,
+              ),
+              ValueListenableBuilder(
+                valueListenable: valueStatPulang,
+                builder: (BuildContext context, String value, _) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: MyColors.neutral7(),
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<String>(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '*Select one';
+                          }
+                          return null;
+                        },
+                        isExpanded: true,
+                        icon: const Icon(Icons.expand_more),
+                        value: (value.isEmpty) ? null : value,
+                        hint: Text(
+                          'Pilih status pulang pasien',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: MyColors.neutral6(),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        onChanged: (inputan) =>
+                            valueStatPulang.value = inputan.toString(),
+                        items: statPulangItem
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: MyColors.black(),
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              PoppinsText.blackMedium(
+                  '*Pastikan semua data terisi dengan benar', 14),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(double.infinity, 60),
+                  elevation: 0,
+                  primary: MyColors.blue(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PoppinsText.whiteBold('Konfirmasi', 20),
+                  ],
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    var response =
+                        await hospitalApi.activateSession(widget.sessionId);
+                    if (response.statusCode == 401) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => dialogError(
+                            context,
+                            'error authorization ${response.statusCode}',
+                            '${response.statusMessage}, Restart kembali aplikasi'),
+                      );
+                    } else if (response.statusCode != 200) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => dialogError(
+                            context,
+                            'active session error ${response.statusCode}',
+                            '${response.statusMessage}, Hubungi teknisi atau Silahkan coba kembali.'),
+                      );
+                    } else {
+                      var response2 = await hospitalApi.completeSession(
+                          widget.sessionId,
+                          controllerAnamnesa.text,
+                          controllerDiagnosa.text,
+                          '-',
+                          controllerTerapiObat.text,
+                          controllerTB.text,
+                          controllerBB.text,
+                          controllerSistole.text,
+                          controllerDiastole.text,
+                          controllerSuhu.text,
+                          valueStatPulang.value);
+
+                      if (response2.statusCode == 401) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => dialogError(
+                              context,
+                              'error authorization ${response2.statusCode}',
+                              '${response2.statusMessage} ,Restart kembali aplikasi'),
+                        );
+                      } else if (response2.statusCode != 200) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) => dialogError(
+                              context,
+                              'complete session error ${response2.statusCode}',
+                              '${response2.statusMessage}, Hubungi teknisi atau Silahkan coba kembali.'),
+                        );
+                      } else {
+                        if (!mounted) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResponScreen(),
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+Widget dialogError(BuildContext context, String title, String subtitle) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+    contentPadding: const EdgeInsets.only(top: 30),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
+          child: Column(
+            children: [
+              Text(title,
+                  style: GoogleFonts.poppins(
+                      color: MyColors.black(),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                subtitle,
+                style: GoogleFonts.poppins(
+                  color: MyColors.neutral6(),
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        const Divider(
+          thickness: 1,
+          height: 1,
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            primary: Colors.transparent,
+            minimumSize: const Size(double.infinity, 45),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Coba Lagi',
+            style: GoogleFonts.poppins(
+              color: MyColors.black(),
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
