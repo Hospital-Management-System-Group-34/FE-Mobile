@@ -159,7 +159,7 @@ class _JadwalScreenState extends State<JadwalScreen> {
                 parent: BouncingScrollPhysics(),
               ),
               itemBuilder: (context, index) {
-                var sesi = filtered[index];
+                var sesi = filtered[filtered.length - (index + 1)];
                 var pasien = providerPatient.patientModel!.data!
                     .lastWhere((element) => element.id == sesi.patientID);
                 return Padding(
@@ -206,7 +206,7 @@ class _JadwalScreenState extends State<JadwalScreen> {
                 parent: BouncingScrollPhysics(),
               ),
               itemBuilder: (context, index) {
-                var sesi = filtered[index];
+                var sesi = filtered[filtered.length - (index + 1)];
                 var pasien = providerPatient.patientModel!.data!
                     .lastWhere((element) => element.id == sesi.patientID);
                 return Padding(
