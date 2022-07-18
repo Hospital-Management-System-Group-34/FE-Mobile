@@ -10,6 +10,12 @@ Widget myTextField({
   required String hintText,
 }) {
   return TextFormField(
+    validator: (value) {
+      if (value == null || value.isEmpty) {
+        return '*required field';
+      }
+      return null;
+    },
     controller: controller,
     keyboardType: textInputType,
     maxLines: maxLines,
