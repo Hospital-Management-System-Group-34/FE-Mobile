@@ -7,6 +7,8 @@ Widget myDisabledTextField(String textInput) {
   myController.text = textInput;
 
   return TextField(
+    minLines: 1,
+    maxLines: 3,
     controller: myController,
     style: GoogleFonts.poppins(
       color: MyColors.neutral7(),

@@ -48,10 +48,8 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
   var controllerSistole = TextEditingController();
   var controllerDiastole = TextEditingController();
   var controllerSuhu = TextEditingController();
+  var controllerAlergiObat = TextEditingController();
   late TabController _controllerTab;
-
-  final valueAlergiObat = ValueNotifier('');
-  final alergiObatItem = ['Ada', 'Tidak Ada'];
 
   final valueStatPulang = ValueNotifier('');
   final statPulangItem = ['Rawat Jalan', 'Rawat Inap', 'Pulang'];
@@ -275,50 +273,12 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
               const SizedBox(
                 height: 10,
               ),
-              ValueListenableBuilder(
-                valueListenable: valueAlergiObat,
-                builder: (BuildContext context, String value, _) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: MyColors.neutral7(),
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        icon: const Icon(Icons.expand_more),
-                        value: (value.isEmpty) ? null : value,
-                        hint: Text(
-                          'Apakah pasien ada alergi obat?',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: MyColors.neutral6(),
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        onChanged: (inputan) =>
-                            valueAlergiObat.value = inputan.toString(),
-                        items: alergiObatItem
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(
-                                    e,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14,
-                                      color: MyColors.black(),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              myTextField(
+                  controller: controllerAlergiObat,
+                  textInputType: TextInputType.text,
+                  maxLines: 3,
+                  minLines: 1,
+                  hintText: 'Apakah pasien ada alergi obat?'),
               const SizedBox(
                 height: 15,
               ),
@@ -559,7 +519,7 @@ class _ProsesPasienScreenState extends State<ProsesPasienScreen>
                           widget.sessionId,
                           controllerAnamnesa.text,
                           controllerDiagnosa.text,
-                          '-',
+                          controllerAlergiObat.text,
                           controllerTerapiObat.text,
                           controllerTB.text,
                           controllerBB.text,
