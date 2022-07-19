@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (authModel.code != 200) {
         await sp.setBool('loginStatus', false);
         await sp.remove('user');
+        await sp.remove('id');
         await sp.remove('accessToken');
         await sp.remove('refreshToken');
         Future.delayed(
@@ -58,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => HomeScreen(
-                  userName: '${sp.getString('user')}',
+                  user: '${sp.getString('id')}',
                 ),
               ),
               (route) => false,

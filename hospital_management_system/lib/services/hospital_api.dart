@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:hospital_management_system/models/authentication_model.dart';
 import 'package:hospital_management_system/models/clinic_model.dart';
+import 'package:hospital_management_system/models/doctor_model.dart';
 import 'package:hospital_management_system/models/patient_id_model.dart';
 import 'package:hospital_management_system/models/patient_model.dart';
 import 'package:hospital_management_system/models/session_model.dart';
@@ -15,6 +16,7 @@ class HospitalApi {
   PatientModelById? dataPatientById;
   ClinicModel? dataClinic;
   SessionModel? dataSession;
+  DoctorModel? dataDoctor;
 
   Future login(String id, String password) async {
     dataAuth = null;
@@ -275,5 +277,28 @@ class HospitalApi {
     }
     log('$status');
     return status;
+  }
+
+  Future getDoctor(String userId) async {
+    dataDoctor = null;
+    try {
+      var sp = await SharedPreferences.getInstance();
+      final response = await _dio.get(
+        '${_baseUrl}users/$userId',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${sp.getString('accessToken')}'},
+        ),
+      );
+      dataDoctor = DoctorModel.fromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        dataDoctor = DoctorModel.fromJson(e.response?.data);
+        log(e.response?.data['message']);
+      } else {
+        log(e.message);
+      }
+    }
+    log('${dataDoctor?.code}');
+    return dataDoctor;
   }
 }

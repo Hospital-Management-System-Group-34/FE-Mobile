@@ -221,6 +221,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           sp.setBool('loginStatus', true);
                                           sp.setString('user',
                                               '${provider.loginModel?.data?.userName}');
+                                          sp.setString(
+                                              'id', controllerId.text.trim());
                                           sp.setString('accessToken',
                                               '${provider.loginModel?.data?.accessToken}');
                                           sp.setString('refreshToken',
@@ -228,7 +230,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                           if (!mounted) return;
                                           Navigator.pushAndRemoveUntil(
                                             context,
-                                            transition(type: PageTransitionType.fade, page: HomeScreen(userName: "${provider.loginModel?.data?.userName}"),),
+                                            transition(
+                                              type: PageTransitionType.fade,
+                                              page: HomeScreen(
+                                                  user:
+                                                      controllerId.text.trim()),
+                                            ),
                                             (route) => false,
                                           );
                                         }

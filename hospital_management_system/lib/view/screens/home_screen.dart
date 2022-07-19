@@ -5,6 +5,7 @@ import 'package:hospital_management_system/view/screens/datapasien_screen.dart';
 import 'package:hospital_management_system/view/screens/jadwal_screen.dart';
 import 'package:hospital_management_system/view/screens/profile_screen.dart';
 import 'package:hospital_management_system/viewmodels/provider/clinic_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/doctor_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/image_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/patient_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/session_provider.dart';
@@ -19,8 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/transition.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String userName;
-  const HomeScreen({Key? key, required this.userName}) : super(key: key);
+  final String user;
+  const HomeScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -35,6 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<PatientProvider>(context, listen: false).getPatient();
       Provider.of<SessionProvider>(context, listen: false).getSession();
       Provider.of<ClinicProvider>(context, listen: false).getClinic();
+      Provider.of<DoctorProvider>(context, listen: false)
+          .getDoctor(widget.user);
     });
   }
 
@@ -86,26 +89,43 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(width: 15),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                PoppinsText.blackBold(widget.userName, 16),
-                                PoppinsText.blueSemiBold('Dokter Umum', 12),
-                              ],
-                            ),
+                            Consumer<DoctorProvider>(
+                                builder: (context, provider, _) {
+                              var dokter = provider.doctorModel?.data?.user;
+
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  PoppinsText.blackBold("${dokter?.name}", 16),
+                                  PoppinsText.blueSemiBold(
+                                      'Dokter ${dokter?.speciality}', 12),
+                                ],
+                              );
+                            }),
                           ],
                         ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_forward_ios,
-                              color: MyColors.blue()),
-                          alignment: Alignment.centerRight,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                transition(type: PageTransitionType.fade, page: ProfileScreen(userName: widget.userName),),);
+                        Consumer<DoctorProvider>(
+                          builder: (context, provider, _) {
+                            var dok = provider.doctorModel?.data?.user;
+                            return IconButton(
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  color: MyColors.blue()),
+                              alignment: Alignment.centerRight,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  transition(
+                                    type: PageTransitionType.fade,
+                                    page: ProfileScreen(
+                                        user: dok!.name.toString(),
+                                        speciality: dok.speciality.toString()),
+                                  ),
+                                );
+                              },
+                            );
                           },
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -126,7 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          transition(type: PageTransitionType.fade, page: JadwalScreen(),),
+                          transition(
+                            type: PageTransitionType.fade,
+                            page: const JadwalScreen(),
+                          ),
                         );
                       },
                       child: PoppinsText.blue('Lihat semua', 12),
@@ -226,7 +249,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                         transition(type: PageTransitionType.fade, page: DataPasien(),),
+                          transition(
+                            type: PageTransitionType.fade,
+                            page: const DataPasien(),
+                          ),
                         );
                       },
                       child: PoppinsText.blue('Lihat semua', 12),

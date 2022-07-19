@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hospital_management_system/view/screens/data_dokter_screen.dart';
 import 'package:hospital_management_system/view/screens/login_screen.dart';
 import 'package:hospital_management_system/viewmodels/provider/auth_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/image_provider.dart';
@@ -15,8 +16,10 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String userName;
-  const ProfileScreen({Key? key, required this.userName}) : super(key: key);
+  final String user;
+  final String speciality;
+  const ProfileScreen({Key? key, required this.user, required this.speciality})
+      : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -214,14 +217,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: const Color.fromARGB(255, 9, 194, 222),
                         ),
                         child: Center(
-                            child: PoppinsText.whiteBold('Spesialis', 14)),
+                            child:
+                                PoppinsText.whiteBold(widget.speciality, 14)),
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
-                  PoppinsText.blueBold(widget.userName, 16),
+                  PoppinsText.blueBold(widget.user, 16),
                   const SizedBox(height: 5),
-                  PoppinsText.neutral5Bold('Dokter Umum', 12),
+                  PoppinsText.neutral5Bold('Dokter ${widget.speciality}', 12),
                 ],
               ),
             ),
@@ -236,7 +240,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DataDokterScreen(),
+                            ));
+                      },
                       icon: SvgPicture.asset('assets/profile.svg'),
                       label: PoppinsText.secondary7SemiBold(
                           '    Informasi data dokter', 14)),
@@ -316,6 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   await sp.setBool(
                                                       'loginStatus', false);
                                                   await sp.remove('user');
+                                                  await sp.remove('id');
                                                   await sp
                                                       .remove('accessToken');
                                                   await sp

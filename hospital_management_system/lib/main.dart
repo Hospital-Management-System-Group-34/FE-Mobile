@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hospital_management_system/view/screens/splash_screen.dart';
 import 'package:hospital_management_system/viewmodels/provider/clinic_provider.dart';
+import 'package:hospital_management_system/viewmodels/provider/doctor_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/image_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/patient_by_id_provider.dart';
 import 'package:hospital_management_system/viewmodels/provider/auth_provider.dart';
@@ -23,6 +24,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => PatientByIdProvider()),
         ChangeNotifierProvider(create: (_) => ClinicProvider()),
         ChangeNotifierProvider(create: (_) => MyImageProvider()),
+        ChangeNotifierProvider(create: (_) => DoctorProvider()),
       ],
       child: const MyApp(),
     ),
